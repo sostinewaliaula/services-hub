@@ -1,0 +1,142 @@
+[
+  {
+    "name": "DNS Admin",
+    "url": "http://dns.turnkey.local",
+    "category": "Admin",
+    "ip": "10.176.18.1",
+    "icon": ""
+  },
+  {
+    "name": "Jira",
+    "url": "http://jira.turnkey.local",
+    "category": "Collaboration",
+    "ip": "10.176.18.2",
+    "icon": "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/jira.svg"
+  },
+  {
+    "name": "WebLogic Console",
+    "url": "http://felix.turnkey.local",
+    "category": "Development",
+    "ip": "10.176.18.3",
+    "icon": ""
+  },
+  {
+    "name": "System Monitor",
+    "url": "http://monitor.turnkey.local",
+    "category": "Admin",
+    "ip": "10.176.18.4",
+    "icon": ""
+  },
+  {
+    "name": "User Management",
+    "url": "http://users.turnkey.local",
+    "category": "Admin",
+    "ip": "10.176.18.5",
+    "icon": ""
+  },
+  {
+    "name": "Network Config",
+    "url": "http://network.turnkey.local",
+    "category": "Admin",
+    "ip": "10.176.18.6",
+    "icon": ""
+  },
+  {
+    "name": "SCP",
+    "url": "http://10.176.18.105:8080/scp/login.php",
+    "category": "Admin",
+    "ip": "10.176.18.105",
+    "icon": ""
+  },
+  {
+    "name": "Confluence",
+    "url": "http://confluence.turnkey.local",
+    "category": "Collaboration",
+    "ip": "10.176.18.7",
+    "icon": "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/confluence.svg"
+  },
+  {
+    "name": "Slack",
+    "url": "http://slack.turnkey.local",
+    "category": "Collaboration",
+    "ip": "10.176.18.8",
+    "icon": ""
+  },
+  {
+    "name": "Email",
+    "url": "http://mail.turnkey.local",
+    "category": "Collaboration",
+    "ip": "10.176.18.9",
+    "icon": ""
+  },
+  {
+    "name": "Calendar",
+    "url": "http://calendar.turnkey.local",
+    "category": "Collaboration",
+    "ip": "10.176.18.10",
+    "icon": ""
+  },
+  {
+    "name": "Jenkins",
+    "url": "http://jenkins.turnkey.local",
+    "category": "Development",
+    "ip": "10.176.18.11",
+    "icon": "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/jenkins.svg"
+  },
+  {
+    "name": "GitLab",
+    "url": "http://gitlab.turnkey.local",
+    "category": "Development",
+    "ip": "10.176.18.12",
+    "icon": "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/gitlab.svg"
+  },
+  {
+    "name": "Artifactory",
+    "url": "http://artifacts.turnkey.local",
+    "category": "Development",
+    "ip": "10.176.18.13",
+    "icon": ""
+  },
+  {
+    "name": "Swagger API Docs",
+    "url": "http://api-docs.turnkey.local",
+    "category": "Development",
+    "ip": "10.176.18.14",
+    "icon": ""
+  },
+  {
+    "name": "Help Desk",
+    "url": "http://helpdesk.turnkey.local",
+    "category": "Support",
+    "ip": "10.176.18.15",
+    "icon": ""
+  },
+  {
+    "name": "Knowledge Base",
+    "url": "http://kb.turnkey.local",
+    "category": "Support",
+    "ip": "10.176.18.16",
+    "icon": ""
+  },
+  {
+    "name": "Ticket System",
+    "url": "http://tickets.turnkey.local",
+    "category": "Support",
+    "ip": "10.176.18.17",
+    "icon": ""
+  },
+  {
+    "name": "VPN Portal",
+    "url": "http://vpn.turnkey.local",
+    "category": "Admin",
+    "ip": "10.176.18.18",
+    "icon": ""
+  },
+  {
+    "name": "Remote Desktop",
+    "url": "http://rdp.turnkey.local",
+    "category": "Admin",
+    "ip": "10.176.18.19",
+    "icon": ""
+  }
+]
