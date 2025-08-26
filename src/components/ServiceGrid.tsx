@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
 import { ServiceCard } from './ServiceCard';
 import { SearchIcon } from 'lucide-react';
+import { RefreshCw } from 'lucide-react';
 import servicesData from '../services.json';
 interface Service {
   name: string;
@@ -25,7 +26,7 @@ const getCategoryColor = (category: string): string => {
       return 'bg-gray-100 text-gray-800';
   }
 };
-export function ServiceGrid() {
+export const ServiceGrid = forwardRef(function ServiceGrid(props, ref) {
   const [services, setServices] = useState<Service[]>([]);
   const [filteredServices, setFilteredServices] = useState<Service[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -38,28 +39,33 @@ export function ServiceGrid() {
     return service.category.toLowerCase() !== 'development' && !name.includes('database');
   };
 
-  // Check status of services
+  // Status check logic as a function for reuse
+  const checkStatuses = async () => {
+    setIsLoading(true);
+    const statusPromises = servicesData.map(async (service) => {
+      if (!isCheckable(service)) {
+        return { ...service, status: 'unknown' as const };
+      }
+      try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 3000);
+        await fetch(service.url, { method: 'HEAD', mode: 'no-cors', signal: controller.signal });
+        clearTimeout(timeout);
+        return { ...service, status: 'online' as const };
+      } catch {
+        return { ...service, status: 'offline' as const };
+      }
+    });
+    const checked = await Promise.all(statusPromises);
+    setServices(checked);
+    setFilteredServices(checked);
+    setIsLoading(false);
+  };
+
+  useImperativeHandle(ref, () => ({ refresh: checkStatuses }), [checkStatuses]);
+
+  // Initial load
   useEffect(() => {
-    const checkStatuses = async () => {
-      const statusPromises = servicesData.map(async (service) => {
-        if (!isCheckable(service)) {
-          return { ...service, status: 'unknown' as const };
-        }
-        try {
-          const controller = new AbortController();
-          const timeout = setTimeout(() => controller.abort(), 3000);
-          await fetch(service.url, { method: 'HEAD', mode: 'no-cors', signal: controller.signal });
-          clearTimeout(timeout);
-          return { ...service, status: 'online' as const };
-        } catch {
-          return { ...service, status: 'offline' as const };
-        }
-      });
-      const checked = await Promise.all(statusPromises);
-      setServices(checked);
-      setFilteredServices(checked);
-      setIsLoading(false);
-    };
     checkStatuses();
   }, []);
   // Handle search
@@ -99,13 +105,13 @@ export function ServiceGrid() {
       </div>;
   }
   return <div className="space-y-8">
-      {/* Search bar */}
-      <div className="relative">
-        <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-          <SearchIcon className="w-5 h-5 text-gray-400" />
-        </div>
-        <input type="text" placeholder="Search services..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="block w-full py-3 pl-10 pr-3 text-sm bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+    {/* Search bar */}
+    <div className="relative">
+      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+        <SearchIcon className="w-5 h-5 text-gray-400" />
       </div>
+      <input type="text" placeholder="Search services..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="block w-full py-3 pl-10 pr-3 text-sm bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100" />
+    </div>
 
       {Object.entries(servicesByCategory).length === 0 ? <div className="p-6 text-center bg-white rounded-lg shadow">
           <p className="text-lg text-gray-600">No matching services found</p>
@@ -122,4 +128,4 @@ export function ServiceGrid() {
               </div>
             </div>)}
     </div>;
-}
+});

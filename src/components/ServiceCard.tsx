@@ -66,7 +66,7 @@ export function ServiceCard({
   ) : defaultIcon;
   const statusColor = status === 'online' ? 'bg-green-500' : status === 'offline' ? 'bg-red-500' : 'bg-gray-400';
   const statusLabel = status.charAt(0).toUpperCase() + status.slice(1);
-  return <a href={url} target="_blank" rel="noopener noreferrer" className={`flex flex-col justify-between h-full transition-all duration-200 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md hover:translate-y-[-2px] border-l-4 ${categoryColor} relative`}>
+  return <a href={url} target="_blank" rel="noopener noreferrer" className={`flex flex-col justify-between h-full transition-all duration-200 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm hover:shadow-md hover:translate-y-[-2px] border-l-4 ${categoryColor} relative`}>
     <div className="flex flex-col h-full p-6">
       <div className="flex items-center mb-4">
         <div className="p-2 mr-3 text-white rounded-full bg-opacity-90" style={{
@@ -74,10 +74,10 @@ export function ServiceCard({
         }}>
           {iconElement}
         </div>
-        <h3 className="text-lg font-medium text-gray-900">{name}</h3>
+        <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">{name}</h3>
       </div>
-      <p className="mt-1 mb-4 text-xs text-gray-400 truncate">{url}</p>
-      {ip && <p className="mb-2 text-xs text-gray-500">IP: {ip}</p>}
+      <p className="mt-1 mb-4 text-xs text-gray-400 dark:text-gray-300 truncate">{url}</p>
+      {ip && <p className="mb-2 text-xs text-gray-500 dark:text-gray-400">IP: {ip}</p>}
       <div className="flex items-center mt-auto text-sm font-medium" style={{
         color: category?.toLowerCase() === 'admin' ? '#4f46e5' : category?.toLowerCase() === 'collaboration' ? '#059669' : category?.toLowerCase() === 'development' ? '#d97706' : category?.toLowerCase() === 'support' ? '#0284c7' : '#4b5563'
       }}>
@@ -87,7 +87,7 @@ export function ServiceCard({
       {/* Status indicator in bottom right */}
       <div className="absolute bottom-3 right-3 flex items-center space-x-1">
         <span className={`w-2.5 h-2.5 rounded-full ${statusColor}`} title={statusLabel}></span>
-        <span className="text-xs text-gray-500">{statusLabel}</span>
+        <span className="text-xs text-gray-500 dark:text-gray-300">{statusLabel}</span>
       </div>
     </div>
   </a>;
