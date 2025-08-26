@@ -44,6 +44,74 @@ const getCategoryBgColor = (category: string): string => {
   }
 };
 
+// Helper function to get server display name
+const getServerDisplayName = (category: string): string => {
+  switch (category) {
+    case 'IP-001':
+      return 'DNS Server';
+    case 'IP-004':
+      return 'System Monitor';
+    case 'IP-005':
+      return 'User Management';
+    case 'IP-006':
+      return 'Network Config';
+    case 'IP-007':
+      return 'Confluence Server';
+    case 'IP-008':
+      return 'Slack Server';
+    case 'IP-009':
+      return 'Email Server';
+    case 'IP-010':
+      return 'Calendar Server';
+    case 'IP-012':
+      return 'GitLab Server';
+    case 'IP-013':
+      return 'Artifactory Server';
+    case 'IP-014':
+      return 'Jira Server';
+    case 'IP-015':
+      return 'Help Desk Server';
+    case 'IP-016':
+      return 'Knowledge Base Server';
+    case 'IP-017':
+      return 'Ticket System Server';
+    case 'IP-019':
+      return 'Remote Desktop Server';
+    case 'IP-026':
+      return 'Jenkins Server';
+    case 'IP-027':
+      return 'Gerrit Server';
+    case 'IP-055':
+      return 'Jenkins Server 2';
+    case 'IP-069':
+      return 'VPN Server';
+    case 'IP-073':
+      return 'v6 API Server';
+    case 'IP-093':
+      return 'Jira Test Server';
+    case 'IP-105':
+      return 'Turnkey API Server';
+    case 'IP-130':
+      return 'WebLogic Server (VM 130)';
+    case 'IP-035':
+      return 'WebLogic Server (VM 35)';
+    case 'IP-070':
+      return 'WebLogic Server (VM 70)';
+    case 'IP-097':
+      return 'WebLogic Server (VM 97)';
+    case 'IP-098':
+      return 'WebLogic Server (VM 98)';
+    case 'IP-103':
+      return 'WebLogic Server (VM 103)';
+    case 'IP-140':
+      return 'WebLogic Server (VM 140)';
+    case 'IP-143':
+      return 'Zimbra Email Server';
+    default:
+      return category;
+  }
+};
+
 export const ServiceGrid = forwardRef(function ServiceGrid(props, ref) {
   const [services, setServices] = useState<Service[]>([]);
   const [filteredServices, setFilteredServices] = useState<Service[]>([]);
@@ -188,7 +256,7 @@ export const ServiceGrid = forwardRef(function ServiceGrid(props, ref) {
                 <div className="flex items-center justify-between mb-8">
                   <div className="flex items-center space-x-6">
                     <div className={`px-6 py-3 rounded-2xl shadow-lg ${getCategoryColor(category)}`}>
-                      <span className="font-bold text-lg">{category}</span>
+                      <span className="font-bold text-lg">{getServerDisplayName(category)}</span>
                     </div>
                     <div className="flex items-center space-x-3">
                       <span className="text-3xl font-bold text-gray-900 dark:text-gray-100">

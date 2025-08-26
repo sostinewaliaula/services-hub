@@ -2,141 +2,1023 @@
   {
     "name": "DNS Admin",
     "url": "http://dns.turnkey.local",
-    "category": "Admin",
+    "category": "IP-001",
     "ip": "10.176.18.1",
-    "icon": ""
-  },
-  {
-    "name": "Jira",
-    "url": "http://jira.turnkey.local",
-    "category": "Collaboration",
-    "ip": "10.176.18.2",
-    "icon": "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/jira.svg"
-  },
-  {
-    "name": "WebLogic Console",
-    "url": "http://felix.turnkey.local",
-    "category": "Development",
-    "ip": "10.176.18.3",
     "icon": ""
   },
   {
     "name": "System Monitor",
     "url": "http://monitor.turnkey.local",
-    "category": "Admin",
+    "category": "IP-004",
     "ip": "10.176.18.4",
     "icon": ""
   },
   {
     "name": "User Management",
     "url": "http://users.turnkey.local",
-    "category": "Admin",
+    "category": "IP-005",
     "ip": "10.176.18.5",
     "icon": ""
   },
   {
     "name": "Network Config",
     "url": "http://network.turnkey.local",
-    "category": "Admin",
+    "category": "IP-006",
     "ip": "10.176.18.6",
-    "icon": ""
-  },
-  {
-    "name": "SCP",
-    "url": "http://10.176.18.105:8080/scp/login.php",
-    "category": "Admin",
-    "ip": "10.176.18.105",
     "icon": ""
   },
   {
     "name": "Confluence",
     "url": "http://confluence.turnkey.local",
-    "category": "Collaboration",
+    "category": "IP-007",
     "ip": "10.176.18.7",
     "icon": "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/confluence.svg"
   },
   {
     "name": "Slack",
     "url": "http://slack.turnkey.local",
-    "category": "Collaboration",
+    "category": "IP-008",
     "ip": "10.176.18.8",
     "icon": ""
   },
   {
     "name": "Email",
     "url": "http://mail.turnkey.local",
-    "category": "Collaboration",
+    "category": "IP-009",
     "ip": "10.176.18.9",
     "icon": ""
   },
   {
     "name": "Calendar",
     "url": "http://calendar.turnkey.local",
-    "category": "Collaboration",
+    "category": "IP-010",
     "ip": "10.176.18.10",
     "icon": ""
   },
   {
-    "name": "Jenkins",
-    "url": "http://jenkins.turnkey.local",
-    "category": "Development",
-    "ip": "10.176.18.11",
-    "icon": "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/jenkins.svg"
-  },
-  {
     "name": "GitLab",
     "url": "http://gitlab.turnkey.local",
-    "category": "Development",
+    "category": "IP-012",
     "ip": "10.176.18.12",
     "icon": "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/gitlab.svg"
   },
   {
     "name": "Artifactory",
     "url": "http://artifacts.turnkey.local",
-    "category": "Development",
+    "category": "IP-013",
     "ip": "10.176.18.13",
     "icon": ""
   },
   {
+    "name": "Jira",
+    "url": "http://jira.turnkey.local",
+    "category": "IP-014",
+    "ip": "10.176.18.14",
+    "icon": "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/jira.svg"
+  },
+  {
     "name": "Swagger API Docs",
     "url": "http://api-docs.turnkey.local",
-    "category": "Development",
+    "category": "IP-014",
     "ip": "10.176.18.14",
     "icon": ""
   },
   {
     "name": "Help Desk",
     "url": "http://helpdesk.turnkey.local",
-    "category": "Support",
+    "category": "IP-015",
     "ip": "10.176.18.15",
     "icon": ""
   },
   {
     "name": "Knowledge Base",
     "url": "http://kb.turnkey.local",
-    "category": "Support",
+    "category": "IP-016",
     "ip": "10.176.18.16",
     "icon": ""
   },
   {
     "name": "Ticket System",
     "url": "http://tickets.turnkey.local",
-    "category": "Support",
+    "category": "IP-017",
     "ip": "10.176.18.17",
-    "icon": ""
-  },
-  {
-    "name": "VPN Portal",
-    "url": "http://vpn.turnkey.local",
-    "category": "Admin",
-    "ip": "10.176.18.18",
     "icon": ""
   },
   {
     "name": "Remote Desktop",
     "url": "http://rdp.turnkey.local",
-    "category": "Admin",
+    "category": "IP-019",
     "ip": "10.176.18.19",
     "icon": ""
+  },
+  {
+    "name": "Jenkins",
+    "url": "http://jenkins.turnkey.local",
+    "category": "IP-026",
+    "ip": "10.176.18.26",
+    "icon": "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/jenkins.svg"
+  },
+  {
+    "name": "Gerrit",
+    "url": "http://gerrit.turnkey.local",
+    "category": "IP-027",
+    "ip": "10.176.18.27",
+    "icon": ""
+  },
+  {
+    "name": "VPN Portal",
+    "url": "http://vpn.turnkey.local",
+    "category": "IP-069",
+    "ip": "10.176.18.69",
+    "icon": ""
+  },
+  {
+    "name": "v6 API Server",
+    "url": "http://10.176.18.73:221",
+    "category": "IP-073",
+    "ip": "10.176.18.73",
+    "icon": ""
+  },
+  {
+    "name": "Turnkey API",
+    "url": "http://turnkeyapi.turnkey.local",
+    "category": "IP-105",
+    "ip": "10.176.18.105",
+    "icon": ""
+  },
+  {
+    "name": "SCP",
+    "url": "http://10.176.18.105:8080/scp/login.php",
+    "category": "IP-105",
+    "ip": "10.176.18.105",
+    "icon": ""
+  },
+  {
+    "name": "TQ FMS",
+    "url": "http://10.176.18.130:9002/FMS/",
+    "category": "IP-130",
+    "ip": "10.176.18.130",
+    "icon": ""
+  },
+  {
+    "name": "TQ LMS-GRP",
+    "url": "http://10.176.18.130:9002/LMSGroup",
+    "category": "IP-130",
+    "ip": "10.176.18.130",
+    "icon": ""
+  },
+  {
+    "name": "TQ LMS-ORD",
+    "url": "http://10.176.18.130:9002/LMSV4",
+    "category": "IP-130",
+    "ip": "10.176.18.130",
+    "icon": ""
+  },
+  {
+    "name": "Swico CRM",
+    "url": "http://10.176.18.130:9002/SWICO-CRM",
+    "category": "IP-130",
+    "ip": "10.176.18.130",
+    "icon": ""
+  },
+  {
+    "name": "Heritage FMS",
+    "url": "http://10.176.18.35:7008/FMS",
+    "category": "IP-035",
+    "ip": "10.176.18.35",
+    "icon": ""
+  },
+  {
+    "name": "Heritage FMS2",
+    "url": "http://10.176.18.35:7008/TQFMS/",
+    "category": "IP-035",
+    "ip": "10.176.18.35",
+    "icon": ""
+  },
+  {
+    "name": "Geminia Life Insurance",
+    "url": "http://10.176.18.35:7008/GEMINIA_LMS12C-GRP/",
+    "category": "IP-035",
+    "ip": "10.176.18.35",
+    "icon": ""
+  },
+  {
+    "name": "Geminia Insurance HRMS",
+    "url": "http://10.176.18.35:7008/HRMS/",
+    "category": "IP-035",
+    "ip": "10.176.18.35",
+    "icon": ""
+  },
+  {
+    "name": "Geminia Employee Self Service",
+    "url": "http://10.176.18.35:7008/HRMS_SS/",
+    "category": "IP-035",
+    "ip": "10.176.18.35",
+    "icon": ""
+  },
+  {
+    "name": "Geminia Life LMS ORD",
+    "url": "http://10.176.18.35:7008/LMSV4",
+    "category": "IP-035",
+    "ip": "10.176.18.35",
+    "icon": ""
+  },
+  {
+    "name": "Allianz CRM",
+    "url": "http://10.176.18.35:8001/CRM-ALLIANZ/",
+    "category": "IP-035",
+    "ip": "10.176.18.35",
+    "icon": ""
+  },
+  {
+    "name": "Geminia Insurance HRMS",
+    "url": "http://10.176.18.35:8001/HRMS",
+    "category": "IP-035",
+    "ip": "10.176.18.35",
+    "icon": ""
+  },
+  {
+    "name": "Geminia Insurance CRM",
+    "url": "http://10.176.18.35:8001/GEMINIACRM",
+    "category": "IP-035",
+    "ip": "10.176.18.35",
+    "icon": ""
+  },
+  {
+    "name": "Allianz LMS ORD",
+    "url": "http://10.176.18.35:8001/LMSV4",
+    "category": "IP-035",
+    "ip": "10.176.18.35",
+    "icon": ""
+  },
+  {
+    "name": "Sanlam Allianz Group Life",
+    "url": "http://10.176.18.35:8001/LMS-ALLIANZ-GRP",
+    "category": "IP-035",
+    "ip": "10.176.18.35",
+    "icon": ""
+  },
+  {
+    "name": "Geminia GIS",
+    "url": "http://10.176.18.35:8001/TQGIS",
+    "category": "IP-035",
+    "ip": "10.176.18.35",
+    "icon": ""
+  },
+  {
+    "name": "AIICO Insurance ORD",
+    "url": "http://10.176.18.35:6001/LMS_AIICO_IND-INDV4/",
+    "category": "IP-035",
+    "ip": "10.176.18.35",
+    "icon": ""
+  },
+  {
+    "name": "AIICO Insurance GRP",
+    "url": "http://10.176.18.35:6001/AIICO-LMS-GRP",
+    "category": "IP-035",
+    "ip": "10.176.18.35",
+    "icon": ""
+  },
+  {
+    "name": "AIICO FMS",
+    "url": "http://10.176.18.35:6001/FMS",
+    "category": "IP-035",
+    "ip": "10.176.18.35",
+    "icon": ""
+  },
+  {
+    "name": "AIICO GIS",
+    "url": "http://10.176.18.35:6001/GIS-AICCO/",
+    "category": "IP-035",
+    "ip": "10.176.18.35",
+    "icon": ""
+  },
+  {
+    "name": "AIICO LMS-IND",
+    "url": "http://10.176.18.35:6001/LMS_AIICO_IND-LMSV4",
+    "category": "IP-035",
+    "ip": "10.176.18.35",
+    "icon": ""
+  },
+  {
+    "name": "Mutual Office FMS2",
+    "url": "http://10.176.18.35:8006/TQFMS/",
+    "category": "IP-035",
+    "ip": "10.176.18.35",
+    "icon": ""
+  },
+  {
+    "name": "Mutual Office GRP",
+    "url": "http://10.176.18.35:8006/MUTUAL-LMS-OFFICE-GRP/",
+    "category": "IP-035",
+    "ip": "10.176.18.35",
+    "icon": ""
+  },
+  {
+    "name": "Tunquest FMS",
+    "url": "http://10.176.18.35:8006/FMS/",
+    "category": "IP-035",
+    "ip": "10.176.18.35",
+    "icon": ""
+  },
+  {
+    "name": "TQ-LMS-ORD",
+    "url": "http://10.176.18.35:8006/LMSV4",
+    "category": "IP-035",
+    "ip": "10.176.18.35",
+    "icon": ""
+  },
+  {
+    "name": "Lifeco CRM",
+    "url": "http://10.176.18.35:8006/LIFECO_CRM12C",
+    "category": "IP-035",
+    "ip": "10.176.18.35",
+    "icon": ""
+  },
+  {
+    "name": "Zenith GIS",
+    "url": "http://10.176.18.35:8006/TQGIS",
+    "category": "IP-035",
+    "ip": "10.176.18.35",
+    "icon": ""
+  },
+  {
+    "name": "GA-Life LMS-GRP",
+    "url": "http://10.176.18.35:2001/GALIFE12C-LMS-GRP/",
+    "category": "IP-035",
+    "ip": "10.176.18.35",
+    "icon": ""
+  },
+  {
+    "name": "APA General FMS",
+    "url": "http://10.176.18.35:7001/FMS",
+    "category": "IP-035",
+    "ip": "10.176.18.35",
+    "icon": ""
+  },
+  {
+    "name": "GA21C LMS-ORD",
+    "url": "http://10.176.18.35:2001/LMSV4/",
+    "category": "IP-035",
+    "ip": "10.176.18.35",
+    "icon": ""
+  },
+  {
+    "name": "GA Life LMS-GRP",
+    "url": "http://10.176.18.35:2001/LMS-ALLIANZ-GRP",
+    "category": "IP-035",
+    "ip": "10.176.18.35",
+    "icon": ""
+  },
+  {
+    "name": "NBK Banca",
+    "url": "http://10.176.18.35:2001/NBK-12c",
+    "category": "IP-035",
+    "ip": "10.176.18.35",
+    "icon": ""
+  },
+  {
+    "name": "Custodian FMS",
+    "url": "http://10.176.18.70:8004/FMS/",
+    "category": "IP-070",
+    "ip": "10.176.18.70",
+    "icon": ""
+  },
+  {
+    "name": "Custodian FMS2",
+    "url": "http://10.176.18.70:8004/TQFMS/",
+    "category": "IP-070",
+    "ip": "10.176.18.70",
+    "icon": ""
+  },
+  {
+    "name": "Swico FMS",
+    "url": "http://10.176.18.70:7014/FMS",
+    "category": "IP-070",
+    "ip": "10.176.18.70",
+    "icon": ""
+  },
+  {
+    "name": "Leadway Assurance GIS",
+    "url": "http://10.176.18.70:7014/TQGIS",
+    "category": "IP-070",
+    "ip": "10.176.18.70",
+    "icon": ""
+  },
+  {
+    "name": "Swico Insurance FMS",
+    "url": "http://10.176.18.70:7014/TQFMS",
+    "category": "IP-070",
+    "ip": "10.176.18.70",
+    "icon": ""
+  },
+  {
+    "name": "ABSAUG Banca",
+    "url": "http://10.176.18.70:7005/BBKUG/",
+    "category": "IP-070",
+    "ip": "10.176.18.70",
+    "icon": ""
+  },
+  {
+    "name": "Cannon CRM",
+    "url": "http://10.176.18.70:7005/CRMCANNON",
+    "category": "IP-070",
+    "ip": "10.176.18.70",
+    "icon": ""
+  },
+  {
+    "name": "Fidelity CRM",
+    "url": "http://10.176.18.70:7005/CRMFID",
+    "category": "IP-070",
+    "ip": "10.176.18.70",
+    "icon": ""
+  },
+  {
+    "name": "MLIFE CRM",
+    "url": "http://10.176.18.70:7005/CRMMLIFE",
+    "category": "IP-070",
+    "ip": "10.176.18.70",
+    "icon": ""
+  },
+  {
+    "name": "MLIFE Test FMS",
+    "url": "http://10.176.18.70:7005/FMS",
+    "category": "IP-070",
+    "ip": "10.176.18.70",
+    "icon": ""
+  },
+  {
+    "name": "Barclays UG LMS",
+    "url": "http://10.176.18.70:7005/LMSV4/",
+    "category": "IP-070",
+    "ip": "10.176.18.70",
+    "icon": ""
+  },
+  {
+    "name": "MLIFE FMS",
+    "url": "http://10.176.18.70:7005/TQFMS",
+    "category": "IP-070",
+    "ip": "10.176.18.70",
+    "icon": ""
+  },
+  {
+    "name": "TQ LMS-GRP",
+    "url": "http://10.176.18.70:7005/LMSGroup",
+    "category": "IP-070",
+    "ip": "10.176.18.70",
+    "icon": ""
+  },
+  {
+    "name": "TQ GIS Test",
+    "url": "http://10.176.18.70:7005/TQGISTEST/",
+    "category": "IP-070",
+    "ip": "10.176.18.70",
+    "icon": ""
+  },
+  {
+    "name": "SWICO-CRM",
+    "url": "http://10.176.18.70:7005/SWICO-CRM",
+    "category": "IP-070",
+    "ip": "10.176.18.70",
+    "icon": ""
+  },
+  {
+    "name": "TQ FMS",
+    "url": "http://10.176.18.70:7010/FMS/",
+    "category": "IP-070",
+    "ip": "10.176.18.70",
+    "icon": ""
+  },
+  {
+    "name": "ABSA Zambia",
+    "url": "http://10.176.18.70:6059/BBZAMBIA",
+    "category": "IP-070",
+    "ip": "10.176.18.70",
+    "icon": ""
+  },
+  {
+    "name": "Heritage CRM",
+    "url": "http://10.176.18.70:6059/CRM-HERITAGE",
+    "category": "IP-070",
+    "ip": "10.176.18.70",
+    "icon": ""
+  },
+  {
+    "name": "ABSAUG CRM",
+    "url": "http://10.176.18.70:6059/CRMBBZ",
+    "category": "IP-070",
+    "ip": "10.176.18.70",
+    "icon": ""
+  },
+  {
+    "name": "Heritage FMS",
+    "url": "http://10.176.18.70:6059/FMS",
+    "category": "IP-070",
+    "ip": "10.176.18.70",
+    "icon": ""
+  },
+  {
+    "name": "Heritage FMS2",
+    "url": "http://10.176.18.70:6059/TQFMS/",
+    "category": "IP-070",
+    "ip": "10.176.18.70",
+    "icon": ""
+  },
+  {
+    "name": "TQ GIS",
+    "url": "http://10.176.18.70:6059/GISPROD",
+    "category": "IP-070",
+    "ip": "10.176.18.70",
+    "icon": ""
+  },
+  {
+    "name": "Heritage CRM Test",
+    "url": "http://10.176.18.70:6059/TQCRMTST",
+    "category": "IP-070",
+    "ip": "10.176.18.70",
+    "icon": ""
+  },
+  {
+    "name": "Heritage GIS",
+    "url": "http://10.176.18.70:6059/TQGIS",
+    "category": "IP-070",
+    "ip": "10.176.18.70",
+    "icon": ""
+  },
+  {
+    "name": "ABSA Kenya FMS",
+    "url": "http://10.176.18.70:7011/FMS",
+    "category": "IP-070",
+    "ip": "10.176.18.70",
+    "icon": ""
+  },
+  {
+    "name": "EAUL FMS",
+    "url": "http://10.176.18.70:6015/FMS",
+    "category": "IP-070",
+    "ip": "10.176.18.70",
+    "icon": ""
+  },
+  {
+    "name": "Liberty FMS",
+    "url": "http://10.176.18.97:7001/FMS",
+    "category": "IP-097",
+    "ip": "10.176.18.97",
+    "icon": ""
+  },
+  {
+    "name": "Liberty FMS2",
+    "url": "http://10.176.18.97:7001/TQFMS/",
+    "category": "IP-097",
+    "ip": "10.176.18.97",
+    "icon": ""
+  },
+  {
+    "name": "APA Life LMS-ORD",
+    "url": "http://10.176.18.97:7001/LMSV4",
+    "category": "IP-097",
+    "ip": "10.176.18.97",
+    "icon": ""
+  },
+  {
+    "name": "APALIFE-LMS-GRP",
+    "url": "http://10.176.18.97:7001/APALIFE-LMS-GRP",
+    "category": "IP-097",
+    "ip": "10.176.18.97",
+    "icon": ""
+  },
+  {
+    "name": "TQ Banca",
+    "url": "http://10.176.18.97:7001/ABSA-K/",
+    "category": "IP-097",
+    "ip": "10.176.18.97",
+    "icon": ""
+  },
+  {
+    "name": "Heritage CRM",
+    "url": "http://10.176.18.97:8005/CRM-HERITAGE12C",
+    "category": "IP-097",
+    "ip": "10.176.18.97",
+    "icon": ""
+  },
+  {
+    "name": "TQ GIS",
+    "url": "http://10.176.18.97:8005/BROKERAGE/",
+    "category": "IP-097",
+    "ip": "10.176.18.97",
+    "icon": ""
+  },
+  {
+    "name": "TQ CRM",
+    "url": "http://10.176.18.97:8005/CRM-GEMINIA12C",
+    "category": "IP-097",
+    "ip": "10.176.18.97",
+    "icon": ""
+  },
+  {
+    "name": "Allianz GIS",
+    "url": "http://10.176.18.97:8005/GIS-ALLIANZ",
+    "category": "IP-097",
+    "ip": "10.176.18.97",
+    "icon": ""
+  },
+  {
+    "name": "Allianz FMS",
+    "url": "http://10.176.18.97:8005/FMS",
+    "category": "IP-097",
+    "ip": "10.176.18.97",
+    "icon": ""
+  },
+  {
+    "name": "Allianz FMS2",
+    "url": "http://10.176.18.97:8005/TQFMS/",
+    "category": "IP-097",
+    "ip": "10.176.18.97",
+    "icon": ""
+  },
+  {
+    "name": "TQ Claims Mgt System",
+    "url": "http://10.176.18.97:8005/KCB-12c",
+    "category": "IP-097",
+    "ip": "10.176.18.97",
+    "icon": ""
+  },
+  {
+    "name": "KCB CRM",
+    "url": "http://10.176.18.97:8005/KCB-CRM",
+    "category": "IP-097",
+    "ip": "10.176.18.97",
+    "icon": ""
+  },
+  {
+    "name": "TQ-LMS-ORD",
+    "url": "http://10.176.18.97:8005/LMSV4",
+    "category": "IP-097",
+    "ip": "10.176.18.97",
+    "icon": ""
+  },
+  {
+    "name": "TQ GRP",
+    "url": "http://10.176.18.97:8005/LMS-ALLIANZ-GRP",
+    "category": "IP-097",
+    "ip": "10.176.18.97",
+    "icon": ""
+  },
+  {
+    "name": "AIICO LMS-ORD",
+    "url": "http://10.176.18.97:8005/LMS_AIICO-INDV4",
+    "category": "IP-097",
+    "ip": "10.176.18.97",
+    "icon": ""
+  },
+  {
+    "name": "Heritage GIS",
+    "url": "http://10.176.18.97:8005/GISTQUEST/",
+    "category": "IP-097",
+    "ip": "10.176.18.97",
+    "icon": ""
+  },
+  {
+    "name": "Smile Life FMS",
+    "url": "http://10.176.18.97:9001/FMS",
+    "category": "IP-097",
+    "ip": "10.176.18.97",
+    "icon": ""
+  },
+  {
+    "name": "Smile Life CRM",
+    "url": "http://10.176.18.97:9001/CRM-SMILELIFE",
+    "category": "IP-097",
+    "ip": "10.176.18.97",
+    "icon": ""
+  },
+  {
+    "name": "Smile LMS-ORD",
+    "url": "http://10.176.18.97:9001/LMSV4",
+    "category": "IP-097",
+    "ip": "10.176.18.97",
+    "icon": ""
+  },
+  {
+    "name": "Smile LMS-GRP",
+    "url": "http://10.176.18.97:9001/SMILELIFE-LMS-GRP",
+    "category": "IP-097",
+    "ip": "10.176.18.97",
+    "icon": ""
+  },
+  {
+    "name": "Mutual CRM",
+    "url": "http://10.176.18.98:9001/CRM-MUTUAL",
+    "category": "IP-098",
+    "ip": "10.176.18.98",
+    "icon": ""
+  },
+  {
+    "name": "NBK FMS",
+    "url": "http://10.176.18.98:9001/FMS",
+    "category": "IP-098",
+    "ip": "10.176.18.98",
+    "icon": ""
+  },
+  {
+    "name": "AIICO GIS",
+    "url": "http://10.176.18.98:9001/GIS-AICCO",
+    "category": "IP-098",
+    "ip": "10.176.18.98",
+    "icon": ""
+  },
+  {
+    "name": "Mutual LMS-ORD",
+    "url": "http://10.176.18.98:9001/LMSV4",
+    "category": "IP-098",
+    "ip": "10.176.18.98",
+    "icon": ""
+  },
+  {
+    "name": "Star Discover LMS-GRP",
+    "url": "http://10.176.18.98:9001/LMSGroup",
+    "category": "IP-098",
+    "ip": "10.176.18.98",
+    "icon": ""
+  },
+  {
+    "name": "Mutual GIS",
+    "url": "http://10.176.18.98:9001/TQGIS",
+    "category": "IP-098",
+    "ip": "10.176.18.98",
+    "icon": ""
+  },
+  {
+    "name": "Zenith FMS",
+    "url": "http://10.176.18.98:8002/FMS",
+    "category": "IP-098",
+    "ip": "10.176.18.98",
+    "icon": ""
+  },
+  {
+    "name": "Zenith FMS2",
+    "url": "http://10.176.18.98:8002/TQFMS",
+    "category": "IP-098",
+    "ip": "10.176.18.98",
+    "icon": ""
+  },
+  {
+    "name": "GIFT CRM",
+    "url": "http://10.176.18.98:8002/GIFTCRM",
+    "category": "IP-098",
+    "ip": "10.176.18.98",
+    "icon": ""
+  },
+  {
+    "name": "Zenith CRM",
+    "url": "http://10.176.18.98:8002/ZENITH-CRM-12C",
+    "category": "IP-098",
+    "ip": "10.176.18.98",
+    "icon": ""
+  },
+  {
+    "name": "Lifeco LMS-GRP",
+    "url": "http://10.176.18.103:8099/LMSGroup",
+    "category": "IP-103",
+    "ip": "10.176.18.103",
+    "icon": ""
+  },
+  {
+    "name": "Lifeco LMS-ORD",
+    "url": "http://10.176.18.103:8099/LMSV4",
+    "category": "IP-103",
+    "ip": "10.176.18.103",
+    "icon": ""
+  },
+  {
+    "name": "APA Insurance GIS",
+    "url": "http://10.176.18.140:7001/TQGIS",
+    "category": "IP-140",
+    "ip": "10.176.18.140",
+    "icon": ""
+  },
+  {
+    "name": "Star Discover CRM",
+    "url": "http://10.176.18.140:7001/CRM-STARDISCOVERY",
+    "category": "IP-140",
+    "ip": "10.176.18.140",
+    "icon": ""
+  },
+  {
+    "name": "Star Discover FMS",
+    "url": "http://10.176.18.140:7001/FMS",
+    "category": "IP-140",
+    "ip": "10.176.18.140",
+    "icon": ""
+  },
+  {
+    "name": "Star Discover FMS2",
+    "url": "http://10.176.18.140:7001/TQFMS",
+    "category": "IP-140",
+    "ip": "10.176.18.140",
+    "icon": ""
+  },
+  {
+    "name": "Star Life LMS-ORD",
+    "url": "http://10.176.18.140:7001/LMSV4",
+    "category": "IP-140",
+    "ip": "10.176.18.140",
+    "icon": ""
+  },
+  {
+    "name": "ABSAUG FMS",
+    "url": "http://10.176.18.140:4001/FMS",
+    "category": "IP-140",
+    "ip": "10.176.18.140",
+    "icon": ""
+  },
+  {
+    "name": "ABSAUG CRM",
+    "url": "http://10.176.18.140:4001/CRM-ABSAUG12C",
+    "category": "IP-140",
+    "ip": "10.176.18.140",
+    "icon": ""
+  },
+  {
+    "name": "MUTUAL CRM",
+    "url": "http://10.176.18.140:4001/CRM-MUTUAL",
+    "category": "IP-140",
+    "ip": "10.176.18.140",
+    "icon": ""
+  },
+  {
+    "name": "GA Life CRM",
+    "url": "http://10.176.18.140:4001/GALIFE12C-CRM",
+    "category": "IP-140",
+    "ip": "10.176.18.140",
+    "icon": ""
+  },
+  {
+    "name": "ABSAUG GIS",
+    "url": "http://10.176.18.140:4001/GIS-ABSAUG12C",
+    "category": "IP-140",
+    "ip": "10.176.18.140",
+    "icon": ""
+  },
+  {
+    "name": "TQ LMS-ORD",
+    "url": "http://10.176.18.140:4001/LMSV4",
+    "category": "IP-140",
+    "ip": "10.176.18.140",
+    "icon": ""
+  },
+  {
+    "name": "TQ GIS",
+    "url": "http://10.176.18.140:4001/TQGIS",
+    "category": "IP-140",
+    "ip": "10.176.18.140",
+    "icon": ""
+  },
+  {
+    "name": "APA CRM",
+    "url": "http://10.176.18.140:9001/APA12C-CRM",
+    "category": "IP-140",
+    "ip": "10.176.18.140",
+    "icon": ""
+  },
+  {
+    "name": "APA Life CRM",
+    "url": "http://10.176.18.140:9001/APALIFE12C-CRM",
+    "category": "IP-140",
+    "ip": "10.176.18.140",
+    "icon": ""
+  },
+  {
+    "name": "TQ CRM HANNAH",
+    "url": "http://10.176.18.140:9001/CRM-Hannah",
+    "category": "IP-140",
+    "ip": "10.176.18.140",
+    "icon": ""
+  },
+  {
+    "name": "APA Life Test FMS",
+    "url": "http://10.176.18.140:9001/FMS",
+    "category": "IP-140",
+    "ip": "10.176.18.140",
+    "icon": ""
+  },
+  {
+    "name": "TQ GIS HANNAH",
+    "url": "http://10.176.18.140:9001/TQGIS_HANNAH",
+    "category": "IP-140",
+    "ip": "10.176.18.140",
+    "icon": ""
+  },
+  {
+    "name": "AIICO CRM",
+    "url": "http://10.176.18.140:2001/CRM-AIICO",
+    "category": "IP-140",
+    "ip": "10.176.18.140",
+    "icon": ""
+  },
+  {
+    "name": "Star Life FMS",
+    "url": "http://10.176.18.140:2001/FMS",
+    "category": "IP-140",
+    "ip": "10.176.18.140",
+    "icon": ""
+  },
+  {
+    "name": "KQ CRM",
+    "url": "http://10.176.18.140:2001/KQ-CRM",
+    "category": "IP-140",
+    "ip": "10.176.18.140",
+    "icon": ""
+  },
+  {
+    "name": "KQ GIS",
+    "url": "http://10.176.18.140:2001/KQ-GIS",
+    "category": "IP-140",
+    "ip": "10.176.18.140",
+    "icon": ""
+  },
+  {
+    "name": "Prudential LMS-ORD",
+    "url": "http://10.176.18.140:2001/LMS",
+    "category": "IP-140",
+    "ip": "10.176.18.140",
+    "icon": ""
+  },
+  {
+    "name": "Star Discover GIS",
+    "url": "http://10.176.18.140:2001/TQGIS",
+    "category": "IP-140",
+    "ip": "10.176.18.140",
+    "icon": ""
+  },
+  {
+    "name": "APA FMS",
+    "url": "http://10.176.18.140:5001/FMS",
+    "category": "IP-140",
+    "ip": "10.176.18.140",
+    "icon": ""
+  },
+  {
+    "name": "Liberty CRM",
+    "url": "http://10.176.18.140:5001/TQCRM",
+    "category": "IP-140",
+    "ip": "10.176.18.140",
+    "icon": ""
+  },
+  {
+    "name": "Liberty GIS",
+    "url": "http://10.176.18.140:5001/TQGIS",
+    "category": "IP-140",
+    "ip": "10.176.18.140",
+    "icon": ""
+  },
+  {
+    "name": "MUTUAL-FMS",
+    "url": "http://10.176.18.140:6001/FMS",
+    "category": "IP-140",
+    "ip": "10.176.18.140",
+    "icon": ""
+  },
+  {
+    "name": "GA Life FMS2",
+    "url": "http://10.176.18.140:6001/TQFMS",
+    "category": "IP-140",
+    "ip": "10.176.18.140",
+    "icon": ""
+  },
+  {
+    "name": "Lifeco LMS-GRP",
+    "url": "http://10.176.18.140:6001/LIFECO_LMS12C-GRP",
+    "category": "IP-140",
+    "ip": "10.176.18.140",
+    "icon": ""
+  },
+  {
+    "name": "Lifeco Test LMS",
+    "url": "http://10.176.18.140:6001/LMSV4",
+    "category": "IP-140",
+    "ip": "10.176.18.140",
+    "icon": ""
+  },
+  {
+    "name": "Jira Test",
+    "url": "http://jiratest.turnkey.local",
+    "category": "IP-093",
+    "ip": "10.176.18.93",
+    "icon": "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/jira.svg"
+  },
+  {
+    "name": "Zimbra Email",
+    "url": "http://zimbra.turnkey.local",
+    "category": "IP-143",
+    "ip": "10.176.18.143",
+    "icon": ""
+  },
+  {
+    "name": "Jenkins 2",
+    "url": "http://jenkins.turnkey.local:8080",
+    "category": "IP-055",
+    "ip": "10.176.18.55",
+    "icon": "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/jenkins.svg"
   }
 ]

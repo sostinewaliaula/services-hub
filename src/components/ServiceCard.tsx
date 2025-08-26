@@ -126,7 +126,7 @@ export function ServiceCard({
       target="_blank" 
       rel="noopener noreferrer" 
       className={`
-        group relative flex flex-col justify-between h-full p-6 
+        group relative flex flex-col h-full p-6 
         bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm 
         border border-white/30 dark:border-gray-700/30 
         rounded-2xl shadow-lg hover:shadow-2xl 
@@ -140,10 +140,10 @@ export function ServiceCard({
       
       <div className="relative flex flex-col h-full">
         {/* Header with icon and name */}
-        <div className="flex items-start justify-between mb-4">
-          <div className="flex items-center space-x-3">
+        <div className="mb-4">
+          <div className="flex items-start space-x-3">
             <div className={`
-              p-3 rounded-xl shadow-lg transition-all duration-300 group-hover:scale-110
+              flex-shrink-0 p-3 rounded-xl shadow-lg transition-all duration-300 group-hover:scale-110
               ${categoryColors.bg} ${categoryColors.hover}
             `}>
               <div className="text-white">
@@ -151,7 +151,10 @@ export function ServiceCard({
               </div>
             </div>
             <div className="flex-1 min-w-0">
-              <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 truncate group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">
+              <h3 
+                className="text-lg font-bold text-gray-900 dark:text-gray-100 leading-tight break-words group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 line-clamp-2"
+                title={name}
+              >
                 {name}
               </h3>
             </div>
@@ -160,7 +163,7 @@ export function ServiceCard({
 
         {/* URL and IP info */}
         <div className="space-y-2 mb-4">
-          <p className="text-xs text-gray-500 dark:text-gray-400 truncate font-mono">
+          <p className="text-xs text-gray-500 dark:text-gray-400 truncate font-mono" title={url}>
             {url}
           </p>
           {ip && (
@@ -171,7 +174,7 @@ export function ServiceCard({
         </div>
 
         {/* Status indicator */}
-        <div className="mt-auto">
+        <div className="mt-auto pt-4">
           <div className={`
             flex items-center justify-between p-3 rounded-xl border transition-all duration-200
             ${statusConfig.bg} ${statusConfig.border}
