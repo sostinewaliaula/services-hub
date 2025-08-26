@@ -1,7 +1,6 @@
-import React, { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
+import { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
 import { ServiceCard } from './ServiceCard';
 import { SearchIcon, FilterIcon, GridIcon } from 'lucide-react';
-import { RefreshCw } from 'lucide-react';
 import servicesData from '../services.json';
 
 interface Service {
@@ -26,6 +25,22 @@ const getCategoryColor = (category: string): string => {
       return 'bg-gradient-to-r from-sky-500 to-blue-600 text-white';
     default:
       return 'bg-gradient-to-r from-gray-500 to-slate-600 text-white';
+  }
+};
+
+// Helper function to get category background color
+const getCategoryBgColor = (category: string): string => {
+  switch (category.toLowerCase()) {
+    case 'admin':
+      return 'bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20';
+    case 'collaboration':
+      return 'bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20';
+    case 'development':
+      return 'bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20';
+    case 'support':
+      return 'bg-gradient-to-br from-sky-50 to-blue-50 dark:from-sky-900/20 dark:to-blue-900/20';
+    default:
+      return 'bg-gradient-to-br from-gray-50 to-slate-50 dark:from-gray-900/20 dark:to-slate-900/20';
   }
 };
 
@@ -137,7 +152,7 @@ export const ServiceGrid = forwardRef(function ServiceGrid(props, ref) {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-12">
       {/* Enhanced Search bar */}
       <div className="relative group">
         <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
@@ -164,59 +179,74 @@ export const ServiceGrid = forwardRef(function ServiceGrid(props, ref) {
           <p className="text-gray-500 dark:text-gray-400">Try adjusting your search terms.</p>
         </div>
       ) : (
-        Object.entries(servicesByCategory).map(([category, categoryServices]) => (
-          <div key={category} className="space-y-6">
-            {/* Enhanced Category Header */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <div className={`px-4 py-2 rounded-xl shadow-lg ${getCategoryColor(category)}`}>
-                  <span className="font-semibold">{category}</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                    {categoryServices.length}
-                  </span>
-                  <span className="text-gray-500 dark:text-gray-400 font-medium">
-                    {categoryServices.length === 1 ? 'service' : 'services'}
-                  </span>
-                </div>
-              </div>
-              
-              {/* Status summary */}
-              <div className="flex items-center space-x-2">
-                {(() => {
-                  const onlineCount = categoryServices.filter(s => s.status === 'online').length;
-                  const totalCount = categoryServices.length;
-                  const percentage = totalCount > 0 ? Math.round((onlineCount / totalCount) * 100) : 0;
-                  
-                  return (
-                    <div className="flex items-center space-x-2 px-3 py-1.5 bg-green-50 dark:bg-green-900/20 rounded-full border border-green-200 dark:border-green-800">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                      <span className="text-sm font-medium text-green-700 dark:text-green-300">
-                        {onlineCount}/{totalCount} online ({percentage}%)
+        <div className="space-y-16">
+          {Object.entries(servicesByCategory).map(([category, categoryServices], index) => (
+            <div key={category} className="relative">
+              {/* Category Section with enhanced styling */}
+              <div className={`p-8 rounded-3xl shadow-xl border border-white/20 dark:border-gray-700/50 backdrop-blur-sm ${getCategoryBgColor(category)}`}>
+                {/* Category Header */}
+                <div className="flex items-center justify-between mb-8">
+                  <div className="flex items-center space-x-6">
+                    <div className={`px-6 py-3 rounded-2xl shadow-lg ${getCategoryColor(category)}`}>
+                      <span className="font-bold text-lg">{category}</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <span className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+                        {categoryServices.length}
+                      </span>
+                      <span className="text-gray-500 dark:text-gray-400 font-medium text-lg">
+                        {categoryServices.length === 1 ? 'service' : 'services'}
                       </span>
                     </div>
-                  );
-                })()}
-              </div>
-            </div>
+                  </div>
+                  
+                  {/* Status summary */}
+                  <div className="flex items-center space-x-3">
+                    {(() => {
+                      const onlineCount = categoryServices.filter(s => s.status === 'online').length;
+                      const totalCount = categoryServices.length;
+                      const percentage = totalCount > 0 ? Math.round((onlineCount / totalCount) * 100) : 0;
+                      
+                      return (
+                        <div className="flex items-center space-x-3 px-4 py-2 bg-white/50 dark:bg-gray-800/50 rounded-full border border-white/30 dark:border-gray-700/30 backdrop-blur-sm">
+                          <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                          <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                            {onlineCount}/{totalCount} online
+                          </span>
+                          <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">
+                            ({percentage}%)
+                          </span>
+                        </div>
+                      );
+                    })()}
+                  </div>
+                </div>
 
-            {/* Service Cards Grid */}
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {categoryServices.map(service => (
-                <ServiceCard 
-                  key={service.name} 
-                  name={service.name} 
-                  url={service.url} 
-                  category={service.category} 
-                  ip={service.ip} 
-                  icon={service.icon} 
-                  status={service.status} 
-                />
-              ))}
+                {/* Service Cards Grid */}
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                  {categoryServices.map(service => (
+                    <ServiceCard 
+                      key={service.name} 
+                      name={service.name} 
+                      url={service.url} 
+                      category={service.category} 
+                      ip={service.ip} 
+                      icon={service.icon} 
+                      status={service.status} 
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* Divider between categories (except for the last one) */}
+              {index < Object.entries(servicesByCategory).length - 1 && (
+                <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2">
+                  <div className="w-16 h-1 bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-600 to-transparent rounded-full"></div>
+                </div>
+              )}
             </div>
-          </div>
-        ))
+          ))}
+        </div>
       )}
     </div>
   );

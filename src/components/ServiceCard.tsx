@@ -45,35 +45,30 @@ const getCategoryColors = (category: string = '') => {
     case 'admin':
       return {
         bg: 'bg-gradient-to-br from-indigo-500 to-purple-600',
-        border: 'border-indigo-500/20',
         text: 'text-indigo-600 dark:text-indigo-400',
         hover: 'hover:from-indigo-600 hover:to-purple-700'
       };
     case 'collaboration':
       return {
         bg: 'bg-gradient-to-br from-emerald-500 to-teal-600',
-        border: 'border-emerald-500/20',
         text: 'text-emerald-600 dark:text-emerald-400',
         hover: 'hover:from-emerald-600 hover:to-teal-700'
       };
     case 'development':
       return {
         bg: 'bg-gradient-to-br from-amber-500 to-orange-600',
-        border: 'border-amber-500/20',
         text: 'text-amber-600 dark:text-amber-400',
         hover: 'hover:from-amber-600 hover:to-orange-700'
       };
     case 'support':
       return {
         bg: 'bg-gradient-to-br from-sky-500 to-blue-600',
-        border: 'border-sky-500/20',
         text: 'text-sky-600 dark:text-sky-400',
         hover: 'hover:from-sky-600 hover:to-blue-700'
       };
     default:
       return {
         bg: 'bg-gradient-to-br from-gray-500 to-slate-600',
-        border: 'border-gray-500/20',
         text: 'text-gray-600 dark:text-gray-400',
         hover: 'hover:from-gray-600 hover:to-slate-700'
       };
@@ -132,13 +127,12 @@ export function ServiceCard({
       rel="noopener noreferrer" 
       className={`
         group relative flex flex-col justify-between h-full p-6 
-        bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm 
-        border border-white/20 dark:border-gray-700/50 
+        bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm 
+        border border-white/30 dark:border-gray-700/30 
         rounded-2xl shadow-lg hover:shadow-2xl 
         transition-all duration-300 ease-out
         hover:scale-[1.02] hover:-translate-y-1
         focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2 dark:focus:ring-offset-gray-900
-        ${categoryColors.border}
       `}
     >
       {/* Background gradient overlay */}

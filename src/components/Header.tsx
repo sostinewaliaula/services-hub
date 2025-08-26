@@ -1,16 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LogOutIcon, UserIcon, BellIcon, MenuIcon, RefreshCw, SunIcon, MoonIcon } from 'lucide-react';
+import { BellIcon, MenuIcon, RefreshCw, SunIcon, MoonIcon } from 'lucide-react';
 import { useState } from 'react';
 
 export function Header({ onRefresh }: { onRefresh?: () => void }) {
   const navigate = useNavigate();
   const [dark, setDark] = useState(() => document.documentElement.classList.contains('dark'));
-
-  const handleLogout = () => {
-    localStorage.removeItem('isAuthenticated');
-    navigate('/');
-  };
 
   const toggleDark = () => {
     setDark(d => {
@@ -70,18 +65,6 @@ export function Header({ onRefresh }: { onRefresh?: () => void }) {
 
           <button className="p-2.5 text-gray-600 dark:text-gray-300 transition-all duration-300 rounded-xl hover:text-gray-900 hover:bg-gray-100 dark:hover:text-gray-100 dark:hover:bg-gray-800 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 dark:focus:ring-offset-gray-900">
             <BellIcon className="w-5 h-5" />
-          </button>
-
-          <button className="p-2.5 text-gray-600 dark:text-gray-300 transition-all duration-300 rounded-xl hover:text-gray-900 hover:bg-gray-100 dark:hover:text-gray-100 dark:hover:bg-gray-800 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 dark:focus:ring-offset-gray-900">
-            <UserIcon className="w-5 h-5" />
-          </button>
-
-          <button 
-            onClick={handleLogout}
-            className="p-2.5 text-red-600 dark:text-red-400 transition-all duration-300 rounded-xl hover:text-red-700 hover:bg-red-50 dark:hover:text-red-300 dark:hover:bg-red-900/20 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
-            title="Logout"
-          >
-            <LogOutIcon className="w-5 h-5" />
           </button>
 
           <button className="p-2.5 text-gray-600 dark:text-gray-300 transition-all duration-300 rounded-xl md:hidden hover:text-gray-900 hover:bg-gray-100 dark:hover:text-gray-100 dark:hover:bg-gray-800 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 dark:focus:ring-offset-gray-900">
