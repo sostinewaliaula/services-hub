@@ -1,6 +1,6 @@
 import { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
 import { ServiceCard } from './ServiceCard';
-import { SearchIcon, FilterIcon, GridIcon } from 'lucide-react';
+import { GridIcon } from 'lucide-react';
 import servicesData from '../services.json';
 
 interface Service {
@@ -112,12 +112,15 @@ const getServerDisplayName = (category: string): string => {
   }
 };
 
-export const ServiceGrid = forwardRef(function ServiceGrid(props, ref) {
+interface ServiceGridProps {
+  searchQuery: string;
+}
+
+export const ServiceGrid = forwardRef(function ServiceGrid({ searchQuery }: ServiceGridProps, ref) {
   const [services, setServices] = useState<Service[]>([]);
   const [filteredServices, setFilteredServices] = useState<Service[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
 
   // Helper to determine if a service should be checked
   const isCheckable = (service: Service) => {
@@ -221,27 +224,11 @@ export const ServiceGrid = forwardRef(function ServiceGrid(props, ref) {
 
   return (
     <div className="space-y-12">
-      {/* Enhanced Search bar */}
-      <div className="relative group">
-        <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
-          <SearchIcon className="w-5 h-5 text-gray-400 group-focus-within:text-blue-500 transition-colors duration-200" />
-        </div>
-        <input 
-          type="text" 
-          placeholder="Search services by name, URL, or category..." 
-          value={searchQuery} 
-          onChange={e => setSearchQuery(e.target.value)} 
-          className="block w-full py-4 pl-12 pr-4 text-sm bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent dark:text-gray-100 shadow-lg transition-all duration-200 hover:shadow-xl focus:shadow-xl" 
-        />
-        <div className="absolute inset-y-0 right-0 flex items-center pr-4">
-          <FilterIcon className="w-5 h-5 text-gray-400" />
-        </div>
-      </div>
 
       {Object.entries(servicesByCategory).length === 0 ? (
         <div className="p-12 text-center bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 dark:border-gray-700/50">
           <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center">
-            <SearchIcon className="w-8 h-8 text-gray-400" />
+            <GridIcon className="w-8 h-8 text-gray-400" />
           </div>
           <p className="text-xl font-medium text-gray-600 dark:text-gray-300 mb-2">No matching services found</p>
           <p className="text-gray-500 dark:text-gray-400">Try adjusting your search terms.</p>

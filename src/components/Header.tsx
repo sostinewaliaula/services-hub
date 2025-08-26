@@ -1,14 +1,21 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BellIcon, MenuIcon, RefreshCw, SunIcon, MoonIcon } from 'lucide-react';
+import { BellIcon, MenuIcon, RefreshCw, SunIcon, MoonIcon, SearchIcon, FilterIcon } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { NotificationPanel } from './NotificationPanel';
 
-export function Header({ onRefresh }: { onRefresh?: () => void }) {
+interface HeaderProps {
+  onRefresh?: () => void;
+  searchQuery: string;
+  onSearchChange: (query: string) => void;
+}
+
+export function Header({ onRefresh, searchQuery, onSearchChange }: HeaderProps) {
   const navigate = useNavigate();
   const [dark, setDark] = useState(() => document.documentElement.classList.contains('dark'));
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [offlineCount, setOfflineCount] = useState(0);
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
 
   const toggleDark = () => {
     setDark(d => {
@@ -69,6 +76,7 @@ export function Header({ onRefresh }: { onRefresh?: () => void }) {
     <>
       <header className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-lg border-b border-white/20 dark:border-gray-700/50 sticky top-0 z-50">
         <div className="flex items-center justify-between px-4 py-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+          {/* Logo and Title */}
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-3">
               <div className="relative">
@@ -88,6 +96,26 @@ export function Header({ onRefresh }: { onRefresh?: () => void }) {
             </div>
           </div>
 
+          {/* Search Bar */}
+          <div className="flex-1 max-w-2xl mx-8 hidden md:block">
+            <div className="relative group">
+              <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                <SearchIcon className="w-5 h-5 text-gray-400 group-focus-within:text-blue-500 transition-colors duration-200" />
+              </div>
+              <input 
+                type="text" 
+                placeholder="Search services by name, URL, or category..." 
+                value={searchQuery} 
+                onChange={e => onSearchChange(e.target.value)} 
+                className="block w-full py-3 pl-12 pr-4 text-sm bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent dark:text-gray-100 shadow-lg transition-all duration-200 hover:shadow-xl focus:shadow-xl" 
+              />
+              <div className="absolute inset-y-0 right-0 flex items-center pr-4">
+                <FilterIcon className="w-5 h-5 text-gray-400" />
+              </div>
+            </div>
+          </div>
+
+          {/* Action Buttons */}
           <div className="flex items-center space-x-3">
             {onRefresh && (
               <button
@@ -124,12 +152,42 @@ export function Header({ onRefresh }: { onRefresh?: () => void }) {
               )}
             </button>
 
+            <button 
+              onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
+              className="p-2.5 text-gray-600 dark:text-gray-300 transition-all duration-300 rounded-xl md:hidden hover:text-gray-900 hover:bg-gray-100 dark:hover:text-gray-100 dark:hover:bg-gray-800 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+              title="Search"
+            >
+              <SearchIcon className="w-5 h-5" />
+            </button>
+
             <button className="p-2.5 text-gray-600 dark:text-gray-300 transition-all duration-300 rounded-xl md:hidden hover:text-gray-900 hover:bg-gray-100 dark:hover:text-gray-100 dark:hover:bg-gray-800 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 dark:focus:ring-offset-gray-900">
               <MenuIcon className="w-5 h-5" />
             </button>
           </div>
         </div>
       </header>
+
+      {/* Mobile Search Bar */}
+      {isMobileSearchOpen && (
+        <div className="md:hidden bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-white/20 dark:border-gray-700/50 px-4 py-3">
+          <div className="relative group">
+            <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+              <SearchIcon className="w-5 h-5 text-gray-400 group-focus-within:text-blue-500 transition-colors duration-200" />
+            </div>
+            <input 
+              type="text" 
+              placeholder="Search services by name, URL, or category..." 
+              value={searchQuery} 
+              onChange={e => onSearchChange(e.target.value)} 
+              className="block w-full py-3 pl-12 pr-4 text-sm bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent dark:text-gray-100 shadow-lg transition-all duration-200 hover:shadow-xl focus:shadow-xl" 
+              autoFocus
+            />
+            <div className="absolute inset-y-0 right-0 flex items-center pr-4">
+              <FilterIcon className="w-5 h-5 text-gray-400" />
+            </div>
+          </div>
+        </div>
+      )}
 
       <NotificationPanel 
         isOpen={isNotificationOpen} 

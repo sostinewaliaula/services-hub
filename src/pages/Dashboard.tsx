@@ -9,6 +9,7 @@ export function Dashboard() {
   const navigate = useNavigate();
   const [greeting, setGreeting] = useState('');
   const [currentTime, setCurrentTime] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   const serviceGridRef = useRef<{ refresh: () => void }>(null);
 
   useEffect(() => {
@@ -39,7 +40,11 @@ export function Dashboard() {
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-slate-900 relative">
       <ParticleBackground />
-      <Header onRefresh={() => serviceGridRef.current?.refresh()} />
+      <Header 
+        onRefresh={() => serviceGridRef.current?.refresh()} 
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+      />
       
       {/* Hero Section with enhanced design */}
       <div className="relative overflow-hidden animate-fade-in-up">
@@ -106,7 +111,7 @@ export function Dashboard() {
           </div>
         </div>
 
-        <ServiceGrid ref={serviceGridRef} />
+        <ServiceGrid ref={serviceGridRef} searchQuery={searchQuery} />
       </main>
 
       {/* Enhanced footer */}
