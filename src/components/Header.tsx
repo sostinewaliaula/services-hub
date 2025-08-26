@@ -1,14 +1,17 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LogOutIcon, UserIcon, BellIcon, MenuIcon, RefreshCw } from 'lucide-react';
+import { LogOutIcon, UserIcon, BellIcon, MenuIcon, RefreshCw, SunIcon, MoonIcon } from 'lucide-react';
 import { useState } from 'react';
+
 export function Header({ onRefresh }: { onRefresh?: () => void }) {
   const navigate = useNavigate();
   const [dark, setDark] = useState(() => document.documentElement.classList.contains('dark'));
+
   const handleLogout = () => {
     localStorage.removeItem('isAuthenticated');
     navigate('/');
   };
+
   const toggleDark = () => {
     setDark(d => {
       if (d) {
@@ -19,33 +22,73 @@ export function Header({ onRefresh }: { onRefresh?: () => void }) {
       return !d;
     });
   };
-  return <header className="bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-800 sticky top-0 z-50">
-      <div className="flex items-center justify-between px-4 py-3 mx-auto max-w-7xl sm:px-6 lg:px-8">
-        <div className="flex items-center">
-          <img src="http://10.176.18.105:8080/scp/logo.php?login" alt="Caava Group Logo" className="w-10 h-10 mr-3 rounded-md" />
-          <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">
-            Services Hub
-          </h1>
-        </div>
+
+  return (
+    <header className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-lg border-b border-white/20 dark:border-gray-700/50 sticky top-0 z-50">
+      <div className="flex items-center justify-between px-4 py-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-3">
+            <div className="relative">
+              <img 
+                src="http://10.176.18.105:8080/scp/logo.php?login" 
+                alt="Caava Group Logo" 
+                className="w-12 h-12 rounded-xl shadow-lg ring-2 ring-white/20 dark:ring-gray-700/50" 
+              />
+              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white dark:border-gray-900"></div>
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                Services Hub
+              </h1>
+              <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">Enterprise Dashboard</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center space-x-3">
           {onRefresh && (
             <button
               onClick={onRefresh}
-              className="flex items-center px-4 py-2 font-semibold rounded shadow transition-all duration-200 bg-gradient-to-r from-blue-500 to-blue-700 text-white hover:from-blue-600 hover:to-blue-800 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:from-blue-600 dark:to-blue-900 dark:hover:from-blue-700 dark:hover:to-blue-950 dark:text-white"
+              className="flex items-center px-4 py-2.5 font-semibold rounded-xl shadow-lg transition-all duration-300 bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 dark:focus:ring-offset-gray-900 hover:shadow-xl"
             >
               <RefreshCw className="w-4 h-4 mr-2" />
               Refresh
             </button>
           )}
-          <button onClick={toggleDark} className="p-1 text-gray-500 transition-colors duration-200 rounded-full hover:text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-gray-100 dark:hover:bg-gray-800" title="Toggle dark mode">
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m8.66-13.66l-.71.71M4.05 19.07l-.71.71M21 12h-1M4 12H3m16.66 5.66l-.71-.71M4.05 4.93l-.71-.71M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-            </svg>
+
+          <button 
+            onClick={toggleDark} 
+            className="p-2.5 text-gray-600 dark:text-gray-300 transition-all duration-300 rounded-xl hover:text-gray-900 hover:bg-gray-100 dark:hover:text-gray-100 dark:hover:bg-gray-800 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 dark:focus:ring-offset-gray-900" 
+            title="Toggle dark mode"
+          >
+            {dark ? (
+              <SunIcon className="w-5 h-5" />
+            ) : (
+              <MoonIcon className="w-5 h-5" />
+            )}
           </button>
-          <button className="p-1 text-gray-500 transition-colors duration-200 rounded-full md:hidden hover:text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-gray-100 dark:hover:bg-gray-800">
-            <MenuIcon className="w-6 h-6" />
+
+          <button className="p-2.5 text-gray-600 dark:text-gray-300 transition-all duration-300 rounded-xl hover:text-gray-900 hover:bg-gray-100 dark:hover:text-gray-100 dark:hover:bg-gray-800 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 dark:focus:ring-offset-gray-900">
+            <BellIcon className="w-5 h-5" />
+          </button>
+
+          <button className="p-2.5 text-gray-600 dark:text-gray-300 transition-all duration-300 rounded-xl hover:text-gray-900 hover:bg-gray-100 dark:hover:text-gray-100 dark:hover:bg-gray-800 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 dark:focus:ring-offset-gray-900">
+            <UserIcon className="w-5 h-5" />
+          </button>
+
+          <button 
+            onClick={handleLogout}
+            className="p-2.5 text-red-600 dark:text-red-400 transition-all duration-300 rounded-xl hover:text-red-700 hover:bg-red-50 dark:hover:text-red-300 dark:hover:bg-red-900/20 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+            title="Logout"
+          >
+            <LogOutIcon className="w-5 h-5" />
+          </button>
+
+          <button className="p-2.5 text-gray-600 dark:text-gray-300 transition-all duration-300 rounded-xl md:hidden hover:text-gray-900 hover:bg-gray-100 dark:hover:text-gray-100 dark:hover:bg-gray-800 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 dark:focus:ring-offset-gray-900">
+            <MenuIcon className="w-5 h-5" />
           </button>
         </div>
       </div>
-    </header>;
+    </header>
+  );
 }

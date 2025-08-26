@@ -1,5 +1,6 @@
 import React from 'react';
-import { ExternalLinkIcon, ServerIcon, UsersIcon, CodeIcon, LifeBuoyIcon, DatabaseIcon, GlobeIcon, MailIcon, CalendarIcon, GitBranchIcon, ClockIcon, LayersIcon, FileTextIcon, MonitorIcon, NetworkIcon, ShieldIcon, TicketIcon, BookOpenIcon } from 'lucide-react';
+import { ExternalLinkIcon, ServerIcon, UsersIcon, CodeIcon, LifeBuoyIcon, DatabaseIcon, GlobeIcon, MailIcon, CalendarIcon, GitBranchIcon, ClockIcon, LayersIcon, FileTextIcon, MonitorIcon, NetworkIcon, ShieldIcon, TicketIcon, BookOpenIcon, WifiIcon, WifiOffIcon, HelpCircleIcon } from 'lucide-react';
+
 interface ServiceProps {
   name: string;
   url: string;
@@ -8,6 +9,7 @@ interface ServiceProps {
   icon?: string;
   status?: 'online' | 'offline' | 'unknown';
 }
+
 // Helper function to get appropriate icon based on service name or category
 const getServiceIcon = (name: string, category: string = '') => {
   const lowerName = name.toLowerCase();
@@ -36,21 +38,78 @@ const getServiceIcon = (name: string, category: string = '') => {
   // Default icon
   return <ServerIcon className="w-5 h-5" />;
 };
-// Get category color
-const getCategoryColor = (category: string = '') => {
+
+// Get category color scheme
+const getCategoryColors = (category: string = '') => {
   switch (category.toLowerCase()) {
     case 'admin':
-      return 'border-l-indigo-500 bg-indigo-50';
+      return {
+        bg: 'bg-gradient-to-br from-indigo-500 to-purple-600',
+        border: 'border-indigo-500/20',
+        text: 'text-indigo-600 dark:text-indigo-400',
+        hover: 'hover:from-indigo-600 hover:to-purple-700'
+      };
     case 'collaboration':
-      return 'border-l-emerald-500 bg-emerald-50';
+      return {
+        bg: 'bg-gradient-to-br from-emerald-500 to-teal-600',
+        border: 'border-emerald-500/20',
+        text: 'text-emerald-600 dark:text-emerald-400',
+        hover: 'hover:from-emerald-600 hover:to-teal-700'
+      };
     case 'development':
-      return 'border-l-amber-500 bg-amber-50';
+      return {
+        bg: 'bg-gradient-to-br from-amber-500 to-orange-600',
+        border: 'border-amber-500/20',
+        text: 'text-amber-600 dark:text-amber-400',
+        hover: 'hover:from-amber-600 hover:to-orange-700'
+      };
     case 'support':
-      return 'border-l-sky-500 bg-sky-50';
+      return {
+        bg: 'bg-gradient-to-br from-sky-500 to-blue-600',
+        border: 'border-sky-500/20',
+        text: 'text-sky-600 dark:text-sky-400',
+        hover: 'hover:from-sky-600 hover:to-blue-700'
+      };
     default:
-      return 'border-l-gray-500 bg-gray-50';
+      return {
+        bg: 'bg-gradient-to-br from-gray-500 to-slate-600',
+        border: 'border-gray-500/20',
+        text: 'text-gray-600 dark:text-gray-400',
+        hover: 'hover:from-gray-600 hover:to-slate-700'
+      };
   }
 };
+
+// Get status configuration
+const getStatusConfig = (status: 'online' | 'offline' | 'unknown') => {
+  switch (status) {
+    case 'online':
+      return {
+        icon: <WifiIcon className="w-4 h-4" />,
+        color: 'text-green-600 dark:text-green-400',
+        bg: 'bg-green-100 dark:bg-green-900/30',
+        border: 'border-green-200 dark:border-green-800',
+        pulse: 'animate-pulse'
+      };
+    case 'offline':
+      return {
+        icon: <WifiOffIcon className="w-4 h-4" />,
+        color: 'text-red-600 dark:text-red-400',
+        bg: 'bg-red-100 dark:bg-red-900/30',
+        border: 'border-red-200 dark:border-red-800',
+        pulse: ''
+      };
+    default:
+      return {
+        icon: <HelpCircleIcon className="w-4 h-4" />,
+        color: 'text-gray-600 dark:text-gray-400',
+        bg: 'bg-gray-100 dark:bg-gray-800',
+        border: 'border-gray-200 dark:border-gray-700',
+        pulse: ''
+      };
+  }
+};
+
 export function ServiceCard({
   name,
   url,
@@ -59,36 +118,89 @@ export function ServiceCard({
   icon,
   status = 'unknown'
 }: ServiceProps) {
-  const categoryColor = getCategoryColor(category);
+  const categoryColors = getCategoryColors(category);
+  const statusConfig = getStatusConfig(status);
   const defaultIcon = getServiceIcon(name, category);
   const iconElement = icon ? (
     <img src={icon} alt={name + ' icon'} className="w-5 h-5" />
   ) : defaultIcon;
-  const statusColor = status === 'online' ? 'bg-green-500' : status === 'offline' ? 'bg-red-500' : 'bg-gray-400';
-  const statusLabel = status.charAt(0).toUpperCase() + status.slice(1);
-  return <a href={url} target="_blank" rel="noopener noreferrer" className={`flex flex-col justify-between h-full transition-all duration-200 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm hover:shadow-md hover:translate-y-[-2px] border-l-4 ${categoryColor} relative`}>
-    <div className="flex flex-col h-full p-6">
-      <div className="flex items-center mb-4">
-        <div className="p-2 mr-3 text-white rounded-full bg-opacity-90" style={{
-          backgroundColor: category?.toLowerCase() === 'admin' ? '#6366f1' : category?.toLowerCase() === 'collaboration' ? '#10b981' : category?.toLowerCase() === 'development' ? '#f59e0b' : category?.toLowerCase() === 'support' ? '#0ea5e9' : '#6b7280'
-        }}>
-          {iconElement}
+
+  return (
+    <a 
+      href={url} 
+      target="_blank" 
+      rel="noopener noreferrer" 
+      className={`
+        group relative flex flex-col justify-between h-full p-6 
+        bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm 
+        border border-white/20 dark:border-gray-700/50 
+        rounded-2xl shadow-lg hover:shadow-2xl 
+        transition-all duration-300 ease-out
+        hover:scale-[1.02] hover:-translate-y-1
+        focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2 dark:focus:ring-offset-gray-900
+        ${categoryColors.border}
+      `}
+    >
+      {/* Background gradient overlay */}
+      <div className={`absolute inset-0 ${categoryColors.bg} opacity-0 group-hover:opacity-5 transition-opacity duration-300 rounded-2xl`}></div>
+      
+      <div className="relative flex flex-col h-full">
+        {/* Header with icon and name */}
+        <div className="flex items-start justify-between mb-4">
+          <div className="flex items-center space-x-3">
+            <div className={`
+              p-3 rounded-xl shadow-lg transition-all duration-300 group-hover:scale-110
+              ${categoryColors.bg} ${categoryColors.hover}
+            `}>
+              <div className="text-white">
+                {iconElement}
+              </div>
+            </div>
+            <div className="flex-1 min-w-0">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 truncate group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">
+                {name}
+              </h3>
+            </div>
+          </div>
         </div>
-        <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">{name}</h3>
+
+        {/* URL and IP info */}
+        <div className="space-y-2 mb-4">
+          <p className="text-xs text-gray-500 dark:text-gray-400 truncate font-mono">
+            {url}
+          </p>
+          {ip && (
+            <p className="text-xs text-gray-400 dark:text-gray-500 font-mono">
+              IP: {ip}
+            </p>
+          )}
+        </div>
+
+        {/* Status indicator */}
+        <div className="mt-auto">
+          <div className={`
+            flex items-center justify-between p-3 rounded-xl border transition-all duration-200
+            ${statusConfig.bg} ${statusConfig.border}
+          `}>
+            <div className="flex items-center space-x-2">
+              <div className={`${statusConfig.color} ${statusConfig.pulse}`}>
+                {statusConfig.icon}
+              </div>
+              <span className={`text-sm font-medium ${statusConfig.color}`}>
+                {status.charAt(0).toUpperCase() + status.slice(1)}
+              </span>
+            </div>
+            
+            <div className={`flex items-center space-x-1 ${categoryColors.text} font-medium text-sm`}>
+              <span>Open</span>
+              <ExternalLinkIcon className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </div>
+          </div>
+        </div>
       </div>
-      <p className="mt-1 mb-4 text-xs text-gray-400 dark:text-gray-300 truncate">{url}</p>
-      {ip && <p className="mb-2 text-xs text-gray-500 dark:text-gray-400">IP: {ip}</p>}
-      <div className="flex items-center mt-auto text-sm font-medium" style={{
-        color: category?.toLowerCase() === 'admin' ? '#4f46e5' : category?.toLowerCase() === 'collaboration' ? '#059669' : category?.toLowerCase() === 'development' ? '#d97706' : category?.toLowerCase() === 'support' ? '#0284c7' : '#4b5563'
-      }}>
-        <span className="mr-1">Open</span>
-        <ExternalLinkIcon className="w-4 h-4" />
-      </div>
-      {/* Status indicator in bottom right */}
-      <div className="absolute bottom-3 right-3 flex items-center space-x-1">
-        <span className={`w-2.5 h-2.5 rounded-full ${statusColor}`} title={statusLabel}></span>
-        <span className="text-xs text-gray-500 dark:text-gray-300">{statusLabel}</span>
-      </div>
-    </div>
-  </a>;
+
+      {/* Hover effect overlay */}
+      <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/0 to-blue-500/0 group-hover:from-blue-500/5 group-hover:via-purple-500/5 group-hover:to-indigo-500/5 transition-all duration-300 rounded-2xl"></div>
+    </a>
+  );
 }
