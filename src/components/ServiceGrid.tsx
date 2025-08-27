@@ -223,7 +223,7 @@ export const ServiceGrid = forwardRef(function ServiceGrid({ searchQuery }: Serv
   }
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-12" data-service-grid>
 
       {Object.entries(servicesByCategory).length === 0 ? (
         <div className="p-12 text-center bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 dark:border-gray-700/50">

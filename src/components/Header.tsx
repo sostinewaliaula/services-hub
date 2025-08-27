@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BellIcon, MenuIcon, RefreshCw, SunIcon, MoonIcon, SearchIcon, FilterIcon } from 'lucide-react';
+import { BellIcon, MenuIcon, RefreshCw, SunIcon, MoonIcon, SearchIcon, FilterIcon, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { NotificationPanel } from './NotificationPanel';
 
@@ -27,6 +27,31 @@ export function Header({ onRefresh, searchQuery, onSearchChange }: HeaderProps) 
       return !d;
     });
   };
+
+  // Function to clear search
+  const clearSearch = () => {
+    onSearchChange('');
+  };
+
+  // Function to scroll to service cards
+  const scrollToServices = () => {
+    const serviceGrid = document.querySelector('[data-service-grid]');
+    if (serviceGrid) {
+      serviceGrid.scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'start',
+        inline: 'nearest'
+      });
+    }
+  };
+
+  // Auto-scroll to services when search query changes
+  useEffect(() => {
+    if (searchQuery.trim()) {
+      // Small delay to ensure the filtered results are rendered
+      setTimeout(scrollToServices, 100);
+    }
+  }, [searchQuery]);
 
   // Check for offline services periodically
   useEffect(() => {
@@ -91,7 +116,7 @@ export function Header({ onRefresh, searchQuery, onSearchChange }: HeaderProps) 
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                   Services Hub
                 </h1>
-                <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">Enterprise Dashboard</p>
+                {/* <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">Enterprise Dashboard</p> */}
               </div>
             </div>
           </div>
@@ -107,10 +132,20 @@ export function Header({ onRefresh, searchQuery, onSearchChange }: HeaderProps) 
                 placeholder="Search services by name, URL, or category..." 
                 value={searchQuery} 
                 onChange={e => onSearchChange(e.target.value)} 
-                className="block w-full py-3 pl-12 pr-4 text-sm bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent dark:text-gray-100 shadow-lg transition-all duration-200 hover:shadow-xl focus:shadow-xl" 
+                className="block w-full py-3 pl-12 pr-12 text-sm bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent dark:text-gray-100 shadow-lg transition-all duration-200 hover:shadow-xl focus:shadow-xl" 
               />
               <div className="absolute inset-y-0 right-0 flex items-center pr-4">
-                <FilterIcon className="w-5 h-5 text-gray-400" />
+                {searchQuery ? (
+                  <button
+                    onClick={clearSearch}
+                    className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-200 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
+                    title="Clear search"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                ) : (
+                  <FilterIcon className="w-5 h-5 text-gray-400" />
+                )}
               </div>
             </div>
           </div>
@@ -179,11 +214,21 @@ export function Header({ onRefresh, searchQuery, onSearchChange }: HeaderProps) 
               placeholder="Search services by name, URL, or category..." 
               value={searchQuery} 
               onChange={e => onSearchChange(e.target.value)} 
-              className="block w-full py-3 pl-12 pr-4 text-sm bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent dark:text-gray-100 shadow-lg transition-all duration-200 hover:shadow-xl focus:shadow-xl" 
+              className="block w-full py-3 pl-12 pr-12 text-sm bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent dark:text-gray-100 shadow-lg transition-all duration-200 hover:shadow-xl focus:shadow-xl" 
               autoFocus
             />
             <div className="absolute inset-y-0 right-0 flex items-center pr-4">
-              <FilterIcon className="w-5 h-5 text-gray-400" />
+              {searchQuery ? (
+                <button
+                  onClick={clearSearch}
+                  className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-200 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
+                  title="Clear search"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              ) : (
+                <FilterIcon className="w-5 h-5 text-gray-400" />
+              )}
             </div>
           </div>
         </div>
