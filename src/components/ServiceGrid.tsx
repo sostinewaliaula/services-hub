@@ -10,6 +10,7 @@ interface Service {
   ip?: string;
   icon?: string;
   status?: 'online' | 'offline' | 'unknown';
+  displayUrl?: string;
 }
 
 // Helper function to get category icon color
@@ -279,17 +280,18 @@ export const ServiceGrid = forwardRef(function ServiceGrid({ searchQuery }: Serv
 
                 {/* Service Cards Grid */}
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                  {categoryServices.map(service => (
-                    <ServiceCard 
-                      key={service.name} 
-                      name={service.name} 
-                      url={service.url} 
-                      category={service.category} 
-                      ip={service.ip} 
-                      icon={service.icon} 
-                      status={service.status} 
-                    />
-                  ))}
+                                     {categoryServices.map(service => (
+                     <ServiceCard 
+                       key={service.name} 
+                       name={service.name} 
+                       url={service.url} 
+                       category={service.category} 
+                       ip={service.ip} 
+                       icon={service.icon} 
+                       status={service.status} 
+                       displayUrl={service.displayUrl}
+                     />
+                   ))}
                 </div>
               </div>
 

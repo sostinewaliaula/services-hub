@@ -186,28 +186,32 @@
     "url": "http://10.176.18.35:7008/FMS",
     "category": "IP-035",
     "ip": "10.176.18.35",
-    "icon": ""
+    "icon": "",
+    "displayUrl": "heritagefms7008-dot35.turnkey.local"
   },
   {
     "name": "Heritage FMS2",
     "url": "http://10.176.18.35:7008/TQFMS/",
     "category": "IP-035",
     "ip": "10.176.18.35",
-    "icon": ""
+    "icon": "",
+    "displayUrl": "heritagefms27008-dot35.turnkey.local"
   },
   {
     "name": "Geminia Life Insurance",
     "url": "http://10.176.18.35:7008/GEMINIA_LMS12C-GRP/",
     "category": "IP-035",
     "ip": "10.176.18.35",
-    "icon": ""
+    "icon": "",
+    "displayUrl": "geminialmsdot35.turnkey.local"
   },
   {
     "name": "Geminia Insurance HRMS",
     "url": "http://10.176.18.35:7008/HRMS/",
     "category": "IP-035",
     "ip": "10.176.18.35",
-    "icon": ""
+    "icon": "",
+    "displayUrl": "geminiahrms7008-dot35.turnkey.local"
   },
   {
     "name": "Geminia Employee Self Service",
@@ -228,7 +232,8 @@
     "url": "http://10.176.18.35:8001/CRM-ALLIANZ/",
     "category": "IP-035",
     "ip": "10.176.18.35",
-    "icon": ""
+    "icon": "",
+    "displayUrl": "allianzcrm8001-dot35.turnkey.local"
   },
   {
     "name": "Geminia Insurance HRMS",
@@ -242,28 +247,32 @@
     "url": "http://10.176.18.35:8001/GEMINIACRM",
     "category": "IP-035",
     "ip": "10.176.18.35",
-    "icon": ""
+    "icon": "",
+    "displayUrl": "geminiacrm8001-dot35.turnkey.local"
   },
   {
     "name": "Allianz LMS ORD",
     "url": "http://10.176.18.35:8001/LMSV4",
     "category": "IP-035",
     "ip": "10.176.18.35",
-    "icon": ""
+    "icon": "",
+    "displayUrl": "allianzlms8001-dot35.turnkey.local"
   },
   {
     "name": "Sanlam Allianz Group Life",
     "url": "http://10.176.18.35:8001/LMS-ALLIANZ-GRP",
     "category": "IP-035",
     "ip": "10.176.18.35",
-    "icon": ""
+    "icon": "",
+    "displayUrl": "allianzlmsgrp8001-dot35.turnkey.local"
   },
   {
     "name": "Geminia GIS",
     "url": "http://10.176.18.35:8001/TQGIS",
     "category": "IP-035",
     "ip": "10.176.18.35",
-    "icon": ""
+    "icon": "",
+    "displayUrl": "geminiagis8001-dot35.turnkey.local"
   },
   {
     "name": "AIICO Insurance ORD",
@@ -382,35 +391,40 @@
     "url": "http://10.176.18.70:8004/FMS/",
     "category": "IP-070",
     "ip": "10.176.18.70",
-    "icon": ""
+    "icon": "",
+    "displayUrl": "custodianfms8004-dot70.turnkey.local"
   },
   {
     "name": "Custodian FMS2",
     "url": "http://10.176.18.70:8004/TQFMS/",
     "category": "IP-070",
     "ip": "10.176.18.70",
-    "icon": ""
+    "icon": "",
+    "displayUrl": "custodianfms28004-dot70.turnkey.local"
   },
   {
     "name": "Swico FMS",
     "url": "http://10.176.18.70:7014/FMS",
     "category": "IP-070",
     "ip": "10.176.18.70",
-    "icon": ""
+    "icon": "",
+    "displayUrl": "swicofms7014-dot70.turnkey.local"
   },
   {
     "name": "Leadway Assurance GIS",
     "url": "http://10.176.18.70:7014/TQGIS",
     "category": "IP-070",
     "ip": "10.176.18.70",
-    "icon": ""
+    "icon": "",
+    "displayUrl": "leadwaygis7014-dot70.turnkey.local"
   },
   {
     "name": "Swico Insurance FMS",
     "url": "http://10.176.18.70:7014/TQFMS",
     "category": "IP-070",
     "ip": "10.176.18.70",
-    "icon": ""
+    "icon": "",
+    "displayUrl": "swicofms27014-dot70.turnkey.local"
   },
   {
     "name": "ABSAUG Banca",
@@ -564,21 +578,24 @@
     "url": "http://10.176.18.97:7001/FMS",
     "category": "IP-097",
     "ip": "10.176.18.97",
-    "icon": ""
+    "icon": "",
+    "displayUrl": "libertyfms7001-dot97.turnkey.local"
   },
   {
     "name": "Liberty FMS2",
     "url": "http://10.176.18.97:7001/TQFMS/",
     "category": "IP-097",
     "ip": "10.176.18.97",
-    "icon": ""
+    "icon": "",
+    "displayUrl": "libertyfms27001-dot97.turnkey.local"
   },
   {
     "name": "APA Life LMS-ORD",
     "url": "http://10.176.18.97:7001/LMSV4",
     "category": "IP-097",
     "ip": "10.176.18.97",
-    "icon": ""
+    "icon": "",
+    "displayUrl": "apalifelms7001-dot97.turnkey.local"
   },
   {
     "name": "APALIFE-LMS-GRP",
@@ -599,7 +616,8 @@
     "url": "http://10.176.18.97:8005/CRM-HERITAGE12C",
     "category": "IP-097",
     "ip": "10.176.18.97",
-    "icon": ""
+    "icon": "",
+    "displayUrl": "heritagecrm8005-dot97.turnkey.local"
   },
   {
     "name": "TQ GIS",
@@ -620,21 +638,24 @@
     "url": "http://10.176.18.97:8005/GIS-ALLIANZ",
     "category": "IP-097",
     "ip": "10.176.18.97",
-    "icon": ""
+    "icon": "",
+    "displayUrl": "allianzgis8005-dot97.turnkey.local"
   },
   {
     "name": "Allianz FMS",
     "url": "http://10.176.18.97:8005/FMS",
     "category": "IP-097",
     "ip": "10.176.18.97",
-    "icon": ""
+    "icon": "",
+    "displayUrl": "allianzfms8005-dot97.turnkey.local"
   },
   {
     "name": "Allianz FMS2",
     "url": "http://10.176.18.97:8005/TQFMS/",
     "category": "IP-097",
     "ip": "10.176.18.97",
-    "icon": ""
+    "icon": "",
+    "displayUrl": "allianzfms28005-dot97.turnkey.local"
   },
   {
     "name": "TQ Claims Mgt System",
@@ -648,7 +669,8 @@
     "url": "http://10.176.18.97:8005/KCB-CRM",
     "category": "IP-097",
     "ip": "10.176.18.97",
-    "icon": ""
+    "icon": "",
+    "displayUrl": "kcbcrm8005-dot97.turnkey.local"
   },
   {
     "name": "TQ-LMS-ORD",
@@ -669,14 +691,16 @@
     "url": "http://10.176.18.97:8005/LMS_AIICO-INDV4",
     "category": "IP-097",
     "ip": "10.176.18.97",
-    "icon": ""
+    "icon": "",
+    "displayUrl": "aiicolms8005-dot97.turnkey.local"
   },
   {
     "name": "Heritage GIS",
     "url": "http://10.176.18.97:8005/GISTQUEST/",
     "category": "IP-097",
     "ip": "10.176.18.97",
-    "icon": ""
+    "icon": "",
+    "displayUrl": "heritagegis8005-dot97.turnkey.local"
   },
   {
     "name": "Smile Life FMS",

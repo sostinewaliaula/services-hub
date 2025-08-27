@@ -8,6 +8,7 @@ interface ServiceProps {
   ip?: string;
   icon?: string;
   status?: 'online' | 'offline' | 'unknown';
+  displayUrl?: string; // New field for friendly URL display
 }
 
 // Helper function to get appropriate icon based on service name or category
@@ -111,7 +112,8 @@ export function ServiceCard({
   category = '',
   ip,
   icon,
-  status = 'unknown'
+  status = 'unknown',
+  displayUrl
 }: ServiceProps) {
   const categoryColors = getCategoryColors(category);
   const statusConfig = getStatusConfig(status);
@@ -163,8 +165,8 @@ export function ServiceCard({
 
         {/* URL and IP info */}
         <div className="space-y-2 mb-4">
-          <p className="text-xs text-gray-500 dark:text-gray-400 truncate font-mono" title={url}>
-            {url}
+          <p className="text-xs text-gray-500 dark:text-gray-400 truncate font-mono" title={displayUrl || url}>
+            {displayUrl || url}
           </p>
           {ip && (
             <p className="text-xs text-gray-400 dark:text-gray-500 font-mono">
