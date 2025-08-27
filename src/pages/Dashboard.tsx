@@ -70,10 +70,10 @@ export function Dashboard() {
                 </h2>
               </div>
               <p className="text-xl text-blue-100 dark:text-blue-200 font-medium">
-                Welcome to your services dashboard
+                Welcome to our services dashboard
               </p>
               <p className="text-blue-200 dark:text-blue-300 max-w-2xl">
-                Access all your internal services, monitor their status, and stay connected with your team's tools and resources.
+                Access all our internal services, monitor their status, and stay connected with your team's tools and resources.
               </p>
             </div>
             

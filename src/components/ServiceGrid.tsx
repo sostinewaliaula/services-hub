@@ -236,51 +236,59 @@ export const ServiceGrid = forwardRef(function ServiceGrid({ searchQuery }: Serv
         </div>
       ) : (
         <div className="space-y-16">
-          {Object.entries(servicesByCategory).map(([category, categoryServices], index) => (
-            <div key={category} className="relative">
-              {/* Category Section with enhanced styling */}
-              <div className={`p-8 rounded-3xl shadow-xl border border-white/20 dark:border-gray-700/50 backdrop-blur-sm ${getCategoryBgColor(category)}`}>
-                {/* Category Header */}
-                <div className="flex items-center justify-between mb-8">
-                  <div className="flex items-center space-x-6">
-                    <div className={`px-6 py-3 rounded-2xl shadow-lg ${getCategoryColor(category)}`}>
-                      <span className="font-bold text-lg">{getServerDisplayName(category)}</span>
+          {Object.entries(servicesByCategory)
+            .sort(([catA], [catB]) => {
+              const aIsWeblogic = getServerDisplayName(catA).toLowerCase().includes('weblogic');
+              const bIsWeblogic = getServerDisplayName(catB).toLowerCase().includes('weblogic');
+              if (aIsWeblogic && !bIsWeblogic) return -1;
+              if (!aIsWeblogic && bIsWeblogic) return 1;
+              return 0;
+            })
+            .map(([category, categoryServices], index) => (
+              <div key={category} className="relative">
+                {/* Category Section with enhanced styling */}
+                <div className={`p-8 rounded-3xl shadow-xl border border-white/20 dark:border-gray-700/50 backdrop-blur-sm ${getCategoryBgColor(category)}`}>
+                  {/* Category Header */}
+                  <div className="flex items-center justify-between mb-8">
+                    <div className="flex items-center space-x-6">
+                      <div className={`px-6 py-3 rounded-2xl shadow-lg ${getCategoryColor(getServerDisplayName(category))}`}>
+                        <span className="font-bold text-lg">{getServerDisplayName(category)}</span>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <span className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+                          {categoryServices.length}
+                        </span>
+                        <span className="text-gray-500 dark:text-gray-400 font-medium text-lg">
+                          {categoryServices.length === 1 ? 'service' : 'services'}
+                        </span>
+                      </div>
                     </div>
+                    
+                    {/* Status summary */}
                     <div className="flex items-center space-x-3">
-                      <span className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-                        {categoryServices.length}
-                      </span>
-                      <span className="text-gray-500 dark:text-gray-400 font-medium text-lg">
-                        {categoryServices.length === 1 ? 'service' : 'services'}
-                      </span>
+                      {(() => {
+                        const onlineCount = categoryServices.filter(s => s.status === 'online').length;
+                        const totalCount = categoryServices.length;
+                        const percentage = totalCount > 0 ? Math.round((onlineCount / totalCount) * 100) : 0;
+                        
+                        return (
+                          <div className="flex items-center space-x-3 px-4 py-2 bg-white/50 dark:bg-gray-800/50 rounded-full border border-white/30 dark:border-gray-700/30 backdrop-blur-sm">
+                            <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                            <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                              {onlineCount}/{totalCount} online
+                            </span>
+                            <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">
+                              ({percentage}%)
+                            </span>
+                          </div>
+                        );
+                      })()}
                     </div>
                   </div>
-                  
-                  {/* Status summary */}
-                  <div className="flex items-center space-x-3">
-                    {(() => {
-                      const onlineCount = categoryServices.filter(s => s.status === 'online').length;
-                      const totalCount = categoryServices.length;
-                      const percentage = totalCount > 0 ? Math.round((onlineCount / totalCount) * 100) : 0;
-                      
-                      return (
-                        <div className="flex items-center space-x-3 px-4 py-2 bg-white/50 dark:bg-gray-800/50 rounded-full border border-white/30 dark:border-gray-700/30 backdrop-blur-sm">
-                          <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                          <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                            {onlineCount}/{totalCount} online
-                          </span>
-                          <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">
-                            ({percentage}%)
-                          </span>
-                        </div>
-                      );
-                    })()}
-                  </div>
-                </div>
 
-                {/* Service Cards Grid */}
-                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                                     {categoryServices.map(service => (
+                  {/* Service Cards Grid */}
+                  <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                                       {categoryServices.map(service => (
                      <ServiceCard 
                        key={service.name} 
                        name={service.name} 
@@ -290,19 +298,20 @@ export const ServiceGrid = forwardRef(function ServiceGrid({ searchQuery }: Serv
                        icon={service.icon} 
                        status={service.status} 
                        displayUrl={service.displayUrl}
+                       categoryDisplayName={getServerDisplayName(category)}
                      />
                    ))}
+                  </div>
                 </div>
-              </div>
 
-              {/* Divider between categories (except for the last one) */}
-              {index < Object.entries(servicesByCategory).length - 1 && (
-                <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2">
-                  <div className="w-16 h-1 bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-600 to-transparent rounded-full"></div>
-                </div>
-              )}
-            </div>
-          ))}
+                {/* Divider between categories (except for the last one) */}
+                {index < Object.entries(servicesByCategory).length - 1 && (
+                  <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2">
+                    <div className="w-16 h-1 bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-600 to-transparent rounded-full"></div>
+                  </div>
+                )}
+              </div>
+            ))}
         </div>
       )}
     </div>

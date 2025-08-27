@@ -9,6 +9,7 @@ interface ServiceProps {
   icon?: string;
   status?: 'online' | 'offline' | 'unknown';
   displayUrl?: string; // New field for friendly URL display
+  categoryDisplayName?: string; // New: display name for color logic
 }
 
 // Helper function to get appropriate icon based on service name or category
@@ -40,39 +41,51 @@ const getServiceIcon = (name: string, category: string = '') => {
   return <ServerIcon className="w-5 h-5" />;
 };
 
-// Get category color scheme
-const getCategoryColors = (category: string = '') => {
-  switch (category.toLowerCase()) {
-    case 'admin':
-      return {
-        bg: 'bg-gradient-to-br from-indigo-500 to-purple-600',
-        text: 'text-indigo-600 dark:text-indigo-400',
-        hover: 'hover:from-indigo-600 hover:to-purple-700'
-      };
-    case 'collaboration':
-      return {
-        bg: 'bg-gradient-to-br from-emerald-500 to-teal-600',
-        text: 'text-emerald-600 dark:text-emerald-400',
-        hover: 'hover:from-emerald-600 hover:to-teal-700'
-      };
-    case 'development':
-      return {
-        bg: 'bg-gradient-to-br from-amber-500 to-orange-600',
-        text: 'text-amber-600 dark:text-amber-400',
-        hover: 'hover:from-amber-600 hover:to-orange-700'
-      };
-    case 'support':
-      return {
-        bg: 'bg-gradient-to-br from-sky-500 to-blue-600',
-        text: 'text-sky-600 dark:text-sky-400',
-        hover: 'hover:from-sky-600 hover:to-blue-700'
-      };
-    default:
-      return {
-        bg: 'bg-gradient-to-br from-gray-500 to-slate-600',
-        text: 'text-gray-600 dark:text-gray-400',
-        hover: 'hover:from-gray-600 hover:to-slate-700'
-      };
+// Helper function to get category color scheme by display name
+const categoryColorMap: Record<string, { bg: string; text: string; hover: string }> = {
+  'WebLogic Server (VM 97)': { bg: 'bg-gradient-to-br from-indigo-500 to-blue-600', text: 'text-indigo-700 dark:text-indigo-300', hover: 'hover:from-indigo-600 hover:to-blue-700' },
+  'WebLogic Server (VM 35)': { bg: 'bg-gradient-to-br from-blue-500 to-cyan-600', text: 'text-blue-700 dark:text-blue-300', hover: 'hover:from-blue-600 hover:to-cyan-700' },
+  'WebLogic Server (VM 70)': { bg: 'bg-gradient-to-br from-purple-500 to-pink-600', text: 'text-purple-700 dark:text-purple-300', hover: 'hover:from-purple-600 hover:to-pink-700' },
+  'WebLogic Server (VM 130)': { bg: 'bg-gradient-to-br from-green-500 to-emerald-600', text: 'text-green-700 dark:text-green-300', hover: 'hover:from-green-600 hover:to-emerald-700' },
+  'WebLogic Server (VM 98)': { bg: 'bg-gradient-to-br from-orange-500 to-yellow-500', text: 'text-orange-700 dark:text-orange-300', hover: 'hover:from-orange-600 hover:to-yellow-600' },
+  'WebLogic Server (VM 103)': { bg: 'bg-gradient-to-br from-pink-500 to-rose-500', text: 'text-pink-700 dark:text-pink-300', hover: 'hover:from-pink-600 hover:to-rose-600' },
+  'WebLogic Server (VM 140)': { bg: 'bg-gradient-to-br from-teal-500 to-cyan-500', text: 'text-teal-700 dark:text-teal-300', hover: 'hover:from-teal-600 hover:to-cyan-600' },
+  'Jenkins Server': { bg: 'bg-gradient-to-br from-yellow-400 to-yellow-600', text: 'text-yellow-700 dark:text-yellow-300', hover: 'hover:from-yellow-500 hover:to-yellow-700' },
+  'Database Server': { bg: 'bg-gradient-to-br from-green-500 to-lime-500', text: 'text-green-700 dark:text-green-300', hover: 'hover:from-green-600 hover:to-lime-600' },
+  'Email Server': { bg: 'bg-gradient-to-br from-pink-500 to-rose-500', text: 'text-pink-700 dark:text-pink-300', hover: 'hover:from-pink-600 hover:to-rose-600' },
+  'Zimbra Email Server': { bg: 'bg-gradient-to-br from-fuchsia-500 to-purple-500', text: 'text-fuchsia-700 dark:text-fuchsia-300', hover: 'hover:from-fuchsia-600 hover:to-purple-600' },
+  'Jira Server': { bg: 'bg-gradient-to-br from-blue-400 to-blue-700', text: 'text-blue-700 dark:text-blue-300', hover: 'hover:from-blue-500 hover:to-blue-800' },
+  'Jira Test Server': { bg: 'bg-gradient-to-br from-sky-400 to-blue-400', text: 'text-sky-700 dark:text-sky-300', hover: 'hover:from-sky-500 hover:to-blue-500' },
+  'GitLab Server': { bg: 'bg-gradient-to-br from-orange-500 to-red-500', text: 'text-orange-700 dark:text-orange-300', hover: 'hover:from-orange-600 hover:to-red-600' },
+  'Gerrit Server': { bg: 'bg-gradient-to-br from-amber-500 to-orange-600', text: 'text-amber-700 dark:text-amber-300', hover: 'hover:from-amber-600 hover:to-orange-700' },
+  'Confluence Server': { bg: 'bg-gradient-to-br from-sky-400 to-blue-400', text: 'text-sky-700 dark:text-sky-300', hover: 'hover:from-sky-500 hover:to-blue-500' },
+  'Calendar Server': { bg: 'bg-gradient-to-br from-lime-400 to-green-400', text: 'text-lime-700 dark:text-lime-300', hover: 'hover:from-lime-500 hover:to-green-500' },
+  'Help Desk Server': { bg: 'bg-gradient-to-br from-fuchsia-500 to-purple-500', text: 'text-fuchsia-700 dark:text-fuchsia-300', hover: 'hover:from-fuchsia-600 hover:to-purple-600' },
+  'VPN Server': { bg: 'bg-gradient-to-br from-cyan-500 to-teal-500', text: 'text-cyan-700 dark:text-cyan-300', hover: 'hover:from-cyan-600 hover:to-teal-600' },
+  'DNS Server': { bg: 'bg-gradient-to-br from-gray-700 to-gray-900', text: 'text-gray-200', hover: 'hover:from-gray-800 hover:to-gray-900' },
+  'System Monitor': { bg: 'bg-gradient-to-br from-emerald-500 to-teal-600', text: 'text-emerald-700 dark:text-emerald-300', hover: 'hover:from-emerald-600 hover:to-teal-700' },
+  'User Management': { bg: 'bg-gradient-to-br from-amber-500 to-orange-600', text: 'text-amber-700 dark:text-amber-300', hover: 'hover:from-amber-600 hover:to-orange-700' },
+  'Network Config': { bg: 'bg-gradient-to-br from-gray-400 to-slate-600', text: 'text-gray-700 dark:text-gray-300', hover: 'hover:from-gray-500 hover:to-slate-700' },
+  'Artifactory Server': { bg: 'bg-gradient-to-br from-rose-400 to-pink-500', text: 'text-rose-700 dark:text-rose-300', hover: 'hover:from-rose-500 hover:to-pink-600' },
+  'Turnkey API Server': { bg: 'bg-gradient-to-br from-blue-500 to-indigo-500', text: 'text-blue-700 dark:text-blue-300', hover: 'hover:from-blue-600 hover:to-indigo-600' },
+};
+const getCategoryColors = (displayName: string = '') => {
+  if (categoryColorMap[displayName]) return categoryColorMap[displayName];
+  // fallback
+  return { bg: 'bg-gradient-to-br from-gray-400 to-slate-600', text: 'text-gray-700 dark:text-gray-300', hover: 'hover:from-gray-500 hover:to-slate-700' };
+};
+
+// Helper to extract port from URL
+const getPortFromUrl = (url: string): string | null => {
+  try {
+    const u = new URL(url);
+    if (u.port) return u.port;
+    // If no explicit port, infer from protocol
+    if (u.protocol === 'http:') return '80';
+    if (u.protocol === 'https:') return '443';
+    return null;
+  } catch {
+    return null;
   }
 };
 
@@ -113,9 +126,10 @@ export function ServiceCard({
   ip,
   icon,
   status = 'unknown',
-  displayUrl
+  displayUrl,
+  categoryDisplayName = ''
 }: ServiceProps) {
-  const categoryColors = getCategoryColors(category);
+  const categoryColors = getCategoryColors(categoryDisplayName);
   const statusConfig = getStatusConfig(status);
   const defaultIcon = getServiceIcon(name, category);
   const iconElement = icon ? (
@@ -149,7 +163,7 @@ export function ServiceCard({
               ${categoryColors.bg} ${categoryColors.hover}
             `}>
               <div className="text-white">
-                {iconElement}
+          {iconElement}
               </div>
             </div>
             <div className="flex-1 min-w-0">
@@ -165,14 +179,22 @@ export function ServiceCard({
 
         {/* URL and IP info */}
         <div className="space-y-2 mb-4">
-          <p className="text-xs text-gray-500 dark:text-gray-400 truncate font-mono" title={displayUrl || url}>
+          <p className="text-xs text-gray-500 dark:text-gray-400 font-mono truncate overflow-hidden whitespace-nowrap max-w-full" title={displayUrl || url}>
             {displayUrl || url}
           </p>
-          {ip && (
-            <p className="text-xs text-gray-400 dark:text-gray-500 font-mono">
-              IP: {ip}
-            </p>
-          )}
+          <div className="flex flex-wrap gap-2 items-center">
+            {ip && (
+              <p className="text-xs text-gray-400 dark:text-gray-500 font-mono">
+                IP: {ip}
+              </p>
+            )}
+            {/* Show port if present */}
+            {getPortFromUrl(url) && (
+              <p className="text-xs text-blue-500 dark:text-blue-400 font-mono">
+                Port: {getPortFromUrl(url)}
+              </p>
+            )}
+          </div>
         </div>
 
         {/* Status indicator */}
@@ -194,8 +216,8 @@ export function ServiceCard({
               <span>Open</span>
               <ExternalLinkIcon className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </div>
-          </div>
-        </div>
+      </div>
+      </div>
       </div>
 
       {/* Hover effect overlay */}
