@@ -108,6 +108,8 @@ const getServerDisplayName = (category: string): string => {
       return 'WebLogic Server (VM 140)';
     case 'IP-143':
       return 'Zimbra Email Server';
+    case 'IP-150':
+      return 'Weblogic Server';
     default:
       return category;
   }
@@ -115,9 +117,10 @@ const getServerDisplayName = (category: string): string => {
 
 interface ServiceGridProps {
   searchQuery: string;
+  highlightService?: string | null;
 }
 
-export const ServiceGrid = forwardRef(function ServiceGrid({ searchQuery }: ServiceGridProps, ref) {
+export const ServiceGrid = forwardRef(function ServiceGrid({ searchQuery, highlightService }: ServiceGridProps, ref) {
   const [services, setServices] = useState<Service[]>([]);
   const [filteredServices, setFilteredServices] = useState<Service[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -288,19 +291,20 @@ export const ServiceGrid = forwardRef(function ServiceGrid({ searchQuery }: Serv
 
                   {/* Service Cards Grid */}
                   <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                                       {categoryServices.map(service => (
-                     <ServiceCard 
-                       key={service.name} 
-                       name={service.name} 
-                       url={service.url} 
-                       category={service.category} 
-                       ip={service.ip} 
-                       icon={service.icon} 
-                       status={service.status} 
-                       displayUrl={service.displayUrl}
-                       categoryDisplayName={getServerDisplayName(category)}
-                     />
-                   ))}
+                    {categoryServices.map(service => (
+                      <ServiceCard 
+                        key={service.name} 
+                        name={service.name} 
+                        url={service.url} 
+                        category={service.category} 
+                        ip={service.ip} 
+                        icon={service.icon} 
+                        status={service.status} 
+                        displayUrl={service.displayUrl}
+                        categoryDisplayName={getServerDisplayName(category)}
+                        highlight={highlightService === service.name}
+                      />
+                    ))}
                   </div>
                 </div>
 

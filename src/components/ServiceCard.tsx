@@ -10,6 +10,7 @@ interface ServiceProps {
   status?: 'online' | 'offline' | 'unknown';
   displayUrl?: string; // New field for friendly URL display
   categoryDisplayName?: string; // New: display name for color logic
+  highlight?: boolean;
 }
 
 // Helper function to get appropriate icon based on service name or category
@@ -127,7 +128,8 @@ export function ServiceCard({
   icon,
   status = 'unknown',
   displayUrl,
-  categoryDisplayName = ''
+  categoryDisplayName = '',
+  highlight = false
 }: ServiceProps) {
   const categoryColors = getCategoryColors(categoryDisplayName);
   const statusConfig = getStatusConfig(status);
@@ -149,6 +151,7 @@ export function ServiceCard({
         transition-all duration-300 ease-out
         hover:scale-[1.02] hover:-translate-y-1
         focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2 dark:focus:ring-offset-gray-900
+        ${highlight ? 'ring-4 ring-purple-400 ring-offset-2 z-10' : ''}
       `}
     >
       {/* Background gradient overlay */}
