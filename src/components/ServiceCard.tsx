@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo, useMemo } from 'react';
 import { ExternalLinkIcon, ServerIcon, UsersIcon, CodeIcon, LifeBuoyIcon, DatabaseIcon, GlobeIcon, MailIcon, CalendarIcon, GitBranchIcon, ClockIcon, LayersIcon, FileTextIcon, MonitorIcon, NetworkIcon, ShieldIcon, TicketIcon, BookOpenIcon, WifiIcon, WifiOffIcon, HelpCircleIcon } from 'lucide-react';
 
 interface ServiceProps {
@@ -13,9 +13,11 @@ interface ServiceProps {
   highlight?: boolean;
 }
 
-// Helper function to get appropriate icon based on service name or category
+// Memoized helper function to get appropriate icon based on service name or category
 const getServiceIcon = (name: string, category: string = '') => {
   const lowerName = name.toLowerCase();
+  const lowerCategory = category.toLowerCase();
+  
   // Check name first
   if (lowerName.includes('dns') || lowerName.includes('network')) return <NetworkIcon className="w-5 h-5" />;
   if (lowerName.includes('monitor')) return <MonitorIcon className="w-5 h-5" />;
@@ -34,10 +36,10 @@ const getServiceIcon = (name: string, category: string = '') => {
   if (lowerName.includes('knowledge') || lowerName.includes('kb')) return <BookOpenIcon className="w-5 h-5" />;
   if (lowerName.includes('ticket')) return <TicketIcon className="w-5 h-5" />;
   // Fallback to category
-  if (category.toLowerCase() === 'admin') return <ShieldIcon className="w-5 h-5" />;
-  if (category.toLowerCase() === 'collaboration') return <UsersIcon className="w-5 h-5" />;
-  if (category.toLowerCase() === 'development') return <CodeIcon className="w-5 h-5" />;
-  if (category.toLowerCase() === 'support') return <LifeBuoyIcon className="w-5 h-5" />;
+  if (lowerCategory === 'admin') return <ShieldIcon className="w-5 h-5" />;
+  if (lowerCategory === 'collaboration') return <UsersIcon className="w-5 h-5" />;
+  if (lowerCategory === 'development') return <CodeIcon className="w-5 h-5" />;
+  if (lowerCategory === 'support') return <LifeBuoyIcon className="w-5 h-5" />;
   // Default icon
   return <ServerIcon className="w-5 h-5" />;
 };
@@ -120,7 +122,7 @@ const getStatusConfig = (status: 'online' | 'offline' | 'unknown') => {
   }
 };
 
-export function ServiceCard({
+const ServiceCard = memo(function ServiceCard({
   name,
   url,
   category = '',
@@ -131,12 +133,16 @@ export function ServiceCard({
   categoryDisplayName = '',
   highlight = false
 }: ServiceProps) {
-  const categoryColors = getCategoryColors(categoryDisplayName);
-  const statusConfig = getStatusConfig(status);
-  const defaultIcon = getServiceIcon(name, category);
-  const iconElement = icon ? (
-    <img src={icon} alt={name + ' icon'} className="w-5 h-5" />
-  ) : defaultIcon;
+  // Memoize expensive calculations
+  const categoryColors = useMemo(() => getCategoryColors(categoryDisplayName), [categoryDisplayName]);
+  const statusConfig = useMemo(() => getStatusConfig(status), [status]);
+  const defaultIcon = useMemo(() => getServiceIcon(name, category), [name, category]);
+  const iconElement = useMemo(() => 
+    icon ? (
+      <img src={icon} alt={name + ' icon'} className="w-5 h-5" />
+    ) : defaultIcon,
+    [icon, name, defaultIcon]
+  );
 
   return (
     <a 
@@ -227,4 +233,6 @@ export function ServiceCard({
       <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/0 to-blue-500/0 group-hover:from-blue-500/5 group-hover:via-purple-500/5 group-hover:to-indigo-500/5 transition-all duration-300 rounded-2xl"></div>
     </a>
   );
-}
+});
+
+export { ServiceCard };
