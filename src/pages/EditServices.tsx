@@ -32,6 +32,7 @@ const EditServices = () => {
   const [showModal, setShowModal] = useState(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
+  const [showEditCategoryModal, setShowEditCategoryModal] = useState(false);
   const [newCategory, setNewCategory] = useState<Category>({ id: '', name: '' });
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<{ show: boolean; category: Category | null }>({ show: false, category: null });
@@ -174,23 +175,27 @@ const EditServices = () => {
   const handleEditCategory = (category: Category) => {
     setEditingCategory(category);
     setNewCategory({ ...category });
-    setShowCategoryModal(true);
+    setShowEditCategoryModal(true);
   };
 
   const handleCategorySubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (newCategory.id && newCategory.name) {
-      let updated: Category[];
-      if (editingCategory) {
-        updated = categories.map(cat => (cat.id === editingCategory.id ? newCategory : cat));
-        saveCategories(updated, 'edit');
-      } else {
-        updated = [...categories, newCategory];
-        saveCategories(updated, 'add');
-      }
+      const updated = [...categories, newCategory];
+      saveCategories(updated, 'add');
       setNewCategory({ id: '', name: '' });
-      setShowCategoryModal(false);
+      // Modal stays open - don't close it
+    }
+  };
+
+  const handleEditCategorySubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (newCategory.id && newCategory.name && editingCategory) {
+      const updated = categories.map(cat => (cat.id === editingCategory.id ? newCategory : cat));
+      saveCategories(updated, 'edit');
+      setShowEditCategoryModal(false);
       setEditingCategory(null);
+      setNewCategory({ id: '', name: '' });
     }
   };
 
@@ -294,8 +299,8 @@ const EditServices = () => {
   if (loading) return <div className="flex items-center justify-center h-96 text-lg text-gray-500">Loading...</div>;
 
   return (
-    <div className="min-h-screen bg-green-50">
-      <div className="w-full bg-green-50">
+    <div className="min-h-screen bg-gray-50 relative">
+      <div className="w-full">
         {/* Toast Notification */}
         {toast && (
           <div className={`fixed top-8 left-1/2 transform -translate-x-1/2 z-[9999] px-6 py-3 rounded-xl shadow-lg font-semibold text-lg transition-all
@@ -307,21 +312,21 @@ const EditServices = () => {
           </div>
         )}
         {/* Fixed Header with Search Bar */}
-        <div className="fixed top-0 left-0 w-full z-40 bg-green-100 shadow flex flex-col md:flex-row md:items-center md:justify-between gap-4 px-8 py-4" style={{ maxWidth: '100vw' }}>
+        <div className="fixed top-0 left-0 w-full z-40 bg-white border-b border-gray-200 shadow-sm flex flex-col md:flex-row md:items-center md:justify-between gap-4 px-8 py-4" style={{ maxWidth: '100vw' }}>
           <div>
-            <h1 className="text-4xl font-bold text-green-700 mb-2">Service Management</h1>
-            <p className="text-green-900 text-lg">View, add, edit, and manage all services.</p>
+            <h1 className="text-4xl font-bold text-gray-800 mb-2">Service Management</h1>
+            <p className="text-gray-600 text-lg">View, add, edit, and manage all services.</p>
           </div>
           <div className="flex flex-col md:flex-row gap-4 items-center w-full md:w-auto">
-            <input className="w-full md:w-96 px-4 py-2 rounded-lg border border-green-300 focus:outline-none focus:ring-2 focus:ring-green-400" type="text" placeholder="Search by name, url, category, or IP..." value={search} onChange={e => setSearch(e.target.value)} />
-            <button className="bg-green-500 text-white px-4 py-2 rounded-lg font-semibold shadow hover:bg-green-600" onClick={() => setSearch('')}>Reset Filters</button>
-            <button className="bg-orange-500 text-white px-4 py-2 rounded-lg font-semibold shadow hover:bg-orange-600" onClick={handleFixUndefinedCategories} disabled={saving}>
+            <input className="w-full md:w-96 px-4 py-2 rounded-lg border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400" type="text" placeholder="Search by name, url, category, or IP..." value={search} onChange={e => setSearch(e.target.value)} />
+            <button className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors" onClick={() => setSearch('')}>Reset Filters</button>
+            <button className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors" onClick={handleFixUndefinedCategories} disabled={saving}>
               Fix Undefined Categories
             </button>
-            <button className="bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold shadow hover:bg-blue-600" onClick={handleAddCategory} disabled={saving}>
+            <button className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-4 py-2 rounded-lg font-semibold transition-all" onClick={handleAddCategory} disabled={saving}>
               Manage Categories
             </button>
-            <button className="bg-gradient-to-r from-green-500 to-purple-400 text-white px-6 py-3 rounded-full shadow flex items-center gap-2 text-lg font-semibold hover:scale-105 transition-transform" onClick={handleAdd} disabled={saving}>
+            <button className="bg-gradient-to-r from-green-500 to-purple-500 hover:from-green-600 hover:to-purple-600 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 text-lg font-semibold transition-all" onClick={handleAdd} disabled={saving}>
               <PlusIcon className="w-5 h-5" /> Add New Service
             </button>
           </div>
@@ -337,23 +342,19 @@ const EditServices = () => {
             onClick={() => setShowModal(false)}
           >
             <div
-              className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-lg relative animate-fade-in-up"
+              className="bg-white rounded-2xl shadow-xl w-full max-w-lg flex flex-col relative animate-fade-in-up"
               onClick={e => e.stopPropagation()}
             >
-              <button className="absolute top-4 right-4 text-gray-400 hover:text-red-500" onClick={() => setShowModal(false)}>
-                <XIcon className="w-6 h-6" />
-              </button>
-              <h2 className="text-2xl font-bold text-green-700 mb-6 flex items-center gap-2">
-                {editIndex !== null ? (
-                  <>
-                    <PencilIcon className="w-5 h-5 text-yellow-500" /> Edit Service
-                  </>
-                ) : (
-                  <>
-                    <PlusIcon className="w-5 h-5 text-green-500" /> Add New Service
-                  </>
-                )}
-              </h2>
+              {/* Header */}
+              <div className="flex items-center justify-between p-6 border-b border-gray-200">
+                <h2 className="text-2xl font-bold text-green-700">Add New Service</h2>
+                <button className="text-gray-400 hover:text-red-500" onClick={() => setShowModal(false)}>
+                  <XIcon className="w-6 h-6" />
+                </button>
+              </div>
+              
+              {/* Scrollable Content */}
+              <div className="flex-1 overflow-y-auto p-6">
               <form onSubmit={handleModalSubmit} className="grid grid-cols-1 gap-4">
                 <div>
                   <input className="rounded-lg border-2 border-green-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 shadow-sm px-4 py-2 transition-all w-full" type="text" placeholder="Name" value={newService.name} onChange={e => setNewService({ ...newService, name: e.target.value })} disabled={saving} required />
@@ -390,18 +391,28 @@ const EditServices = () => {
                   <input className="rounded-lg border-2 border-green-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 shadow-sm px-4 py-2 transition-all w-full" type="text" placeholder="Display URL" value={newService.displayUrl} onChange={e => setNewService({ ...newService, displayUrl: e.target.value })} disabled={saving} />
                   <div className="text-xs text-green-700 mt-1">e.g. <span className="font-mono">heritagefms7008-dot35.turnkey.local</span></div>
                 </div>
-                <button type="submit" className="mt-4 flex items-center gap-2 justify-center px-6 py-3 rounded-full shadow font-semibold text-white text-lg bg-gradient-to-r from-green-500 to-purple-400 hover:scale-105 transition-transform" disabled={saving}>
-                  {editIndex !== null ? (
-                    <>
-                      <PencilIcon className="w-4 h-4" /> Save Changes
-                    </>
-                  ) : (
-                    <>
-                      <PlusIcon className="w-4 h-4" /> Add Service
-                    </>
-                  )}
-                </button>
               </form>
+              </div>
+              
+              {/* Fixed Footer */}
+              <div className="flex justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50 rounded-b-2xl">
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="px-6 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg font-medium transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleModalSubmit(e as any);
+                  }}
+                  disabled={saving}
+                  className="px-6 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg font-medium transition-colors disabled:opacity-50"
+                >
+                  {editIndex !== null ? 'Save Changes' : 'Add Service'}
+                </button>
+              </div>
             </div>
           </div>
         )}
@@ -413,61 +424,57 @@ const EditServices = () => {
             onClick={() => setShowCategoryModal(false)}
           >
             <div
-              className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-4xl max-h-[80vh] overflow-y-auto relative animate-fade-in-up"
+              className="bg-white rounded-2xl shadow-xl w-full max-w-4xl max-h-[80vh] flex flex-col relative animate-fade-in-up"
               onClick={e => e.stopPropagation()}
             >
-              <button className="absolute top-4 right-4 text-gray-400 hover:text-red-500" onClick={() => setShowCategoryModal(false)}>
-                <XIcon className="w-6 h-6" />
-              </button>
-              <h2 className="text-2xl font-bold text-blue-700 mb-6 flex items-center gap-2">
-                <PencilIcon className="w-5 h-5 text-blue-500" /> Manage Categories
-              </h2>
+              {/* Header */}
+              <div className="flex items-center justify-between p-6 border-b border-gray-200">
+                <h2 className="text-2xl font-bold text-blue-700 flex items-center gap-2">
+                  <PencilIcon className="w-5 h-5 text-blue-500" /> Manage Categories
+                </h2>
+                <button className="text-gray-400 hover:text-red-500" onClick={() => setShowCategoryModal(false)}>
+                  <XIcon className="w-6 h-6" />
+                </button>
+              </div>
               
-              {/* Add/Edit Category Form */}
+              {/* Scrollable Content */}
+              <div className="flex-1 overflow-y-auto p-6">
+              
+              {/* Add Category Form */}
               <form onSubmit={handleCategorySubmit} className="mb-6 p-4 bg-blue-50 rounded-lg">
-                <h3 className="text-lg font-semibold text-blue-700 mb-4">
-                  {editingCategory ? 'Edit Category' : 'Add New Category'}
-                </h3>
+                <h3 className="text-lg font-semibold text-blue-700 mb-4">Add New Category</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <input 
-                      className="rounded-lg border-2 border-blue-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 shadow-sm px-4 py-2 transition-all w-full" 
-                      type="text" 
-                      placeholder="Category ID (e.g., web-server)" 
-                      value={newCategory.id} 
-                      onChange={e => setNewCategory({ ...newCategory, id: e.target.value })} 
-                      disabled={saving || !!editingCategory} 
+                    <input
+                      className="rounded-lg border-2 border-blue-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 shadow-sm px-4 py-2 transition-all w-full"
+                      type="text"
+                      placeholder="Category ID (e.g., web-server)"
+                      value={newCategory.id}
+                      onChange={e => setNewCategory({ ...newCategory, id: e.target.value })}
+                      disabled={saving}
                       required 
                     />
                     <div className="text-xs text-blue-700 mt-1">Unique identifier (lowercase, no spaces)</div>
                   </div>
                   <div>
-                    <input 
-                      className="rounded-lg border-2 border-blue-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 shadow-sm px-4 py-2 transition-all w-full" 
-                      type="text" 
-                      placeholder="Category Name (e.g., Web Server)" 
-                      value={newCategory.name} 
-                      onChange={e => setNewCategory({ ...newCategory, name: e.target.value })} 
-                      disabled={saving} 
+                    <input
+                      className="rounded-lg border-2 border-blue-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 shadow-sm px-4 py-2 transition-all w-full"
+                      type="text"
+                      placeholder="Category Name (e.g., Web Server)"
+                      value={newCategory.name}
+                      onChange={e => setNewCategory({ ...newCategory, name: e.target.value })}
+                      disabled={saving}
                       required 
                     />
                     <div className="text-xs text-blue-700 mt-1">Display name for the category</div>
                   </div>
                 </div>
-                <button 
-                  type="submit" 
-                  className="mt-4 flex items-center gap-2 justify-center px-6 py-3 rounded-full shadow font-semibold text-white text-lg bg-gradient-to-r from-blue-500 to-purple-400 hover:scale-105 transition-transform" 
+                <button
+                  type="submit"
+                  className="mt-4 flex items-center gap-2 justify-center px-6 py-3 rounded-full shadow font-semibold text-white text-lg bg-gradient-to-r from-blue-500 to-purple-400 hover:scale-105 transition-transform"
                   disabled={saving}
                 >
-                  {editingCategory ? (
-                    <>
-                      <PencilIcon className="w-4 h-4" /> Update Category
-                    </>
-                  ) : (
-                    <>
-                      <PlusIcon className="w-4 h-4" /> Add Category
-                    </>
-                  )}
+                  <PlusIcon className="w-4 h-4" /> Add Category
                 </button>
               </form>
 
@@ -507,18 +514,104 @@ const EditServices = () => {
                   ))}
                 </div>
               </div>
+              </div>
+              
+              {/* Fixed Footer */}
+              <div className="flex justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50 rounded-b-2xl">
+                <button
+                  onClick={() => setShowCategoryModal(false)}
+                  className="px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors"
+                >
+                  Done
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Edit Category Modal */}
+        {showEditCategoryModal && editingCategory && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40"
+            onClick={() => setShowEditCategoryModal(false)}
+          >
+            <div
+              className="bg-white rounded-2xl shadow-xl w-full max-w-md flex flex-col relative animate-fade-in-up"
+              onClick={e => e.stopPropagation()}
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between p-6 border-b border-gray-200">
+                <h2 className="text-2xl font-bold text-blue-700 flex items-center gap-2">
+                  <PencilIcon className="w-5 h-5 text-blue-500" /> Edit Category
+                </h2>
+                <button className="text-gray-400 hover:text-red-500" onClick={() => setShowEditCategoryModal(false)}>
+                  <XIcon className="w-6 h-6" />
+                </button>
+              </div>
+              
+              {/* Content */}
+              <div className="flex-1 p-6">
+                <form onSubmit={handleEditCategorySubmit} className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Category ID</label>
+                    <input
+                      className="w-full rounded-lg border-2 border-blue-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 shadow-sm px-4 py-2 transition-all"
+                      type="text"
+                      placeholder="Category ID (e.g., web-server)"
+                      value={newCategory.id}
+                      onChange={e => setNewCategory({ ...newCategory, id: e.target.value })}
+                      disabled={saving}
+                      required 
+                    />
+                    <div className="text-xs text-blue-700 mt-1">Unique identifier (lowercase, no spaces)</div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Category Name</label>
+                    <input
+                      className="w-full rounded-lg border-2 border-blue-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 shadow-sm px-4 py-2 transition-all"
+                      type="text"
+                      placeholder="Category Name (e.g., Web Server)"
+                      value={newCategory.name}
+                      onChange={e => setNewCategory({ ...newCategory, name: e.target.value })}
+                      disabled={saving}
+                      required 
+                    />
+                    <div className="text-xs text-blue-700 mt-1">Display name for the category</div>
+                  </div>
+                </form>
+              </div>
+              
+              {/* Fixed Footer */}
+              <div className="flex justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50 rounded-b-2xl">
+                <button
+                  onClick={() => setShowEditCategoryModal(false)}
+                  className="px-6 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg font-medium transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleEditCategorySubmit(e as any);
+                  }}
+                  disabled={saving}
+                  className="px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors disabled:opacity-50"
+                >
+                  {saving ? 'Saving...' : 'Update Category'}
+                </button>
+              </div>
             </div>
           </div>
         )}
 
         {/* Search Results Info */}
         {search && (
-          <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-            <p className="text-blue-700 font-medium">
+          <div className="mb-4 p-4 bg-white border border-gray-200 rounded-lg shadow-sm">
+            <p className="text-gray-700 font-medium">
               Showing {filteredServices.length} result(s) for "{search}"
               <button 
                 onClick={() => setSearch('')} 
-                className="ml-2 text-blue-500 hover:text-blue-700 underline"
+                className="ml-2 text-green-500 hover:text-green-700 underline font-semibold"
               >
                 Clear search
               </button>
@@ -528,7 +621,7 @@ const EditServices = () => {
 
         {/* Table or No Results */}
         {filteredServices.length === 0 ? (
-          <div className="bg-white rounded-2xl shadow p-12 text-center">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
             <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
               <SearchIcon className="w-8 h-8 text-gray-400" />
             </div>
@@ -539,14 +632,14 @@ const EditServices = () => {
             {search && (
               <button 
                 onClick={() => setSearch('')} 
-                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-4 py-2 rounded-lg font-medium transition-all"
               >
                 Clear search
               </button>
             )}
           </div>
         ) : (
-          <div className="bg-white rounded-2xl shadow overflow-x-auto w-full mt-4">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-x-auto w-full mt-4">
             <table className="min-w-full text-left table-fixed">
             <colgroup>
               <col style={{ width: '220px' }} />
@@ -557,31 +650,31 @@ const EditServices = () => {
               <col style={{ width: '260px' }} />
               <col style={{ width: '180px' }} />
             </colgroup>
-            <thead className="bg-green-100 sticky top-0 z-10 shadow-sm border-b-2 border-green-200">
+            <thead className="bg-gray-50 sticky top-0 z-10 border-b border-gray-200">
               <tr>
-                <th className="px-4 py-3 text-green-700 font-bold whitespace-nowrap">Name</th>
-                <th className="px-4 py-3 text-green-700 font-bold whitespace-nowrap">URL</th>
-                <th className="px-4 py-3 text-green-700 font-bold whitespace-nowrap">Category</th>
-                <th className="px-4 py-3 text-green-700 font-bold whitespace-nowrap">IP</th>
-                <th className="px-4 py-3 text-green-700 font-bold whitespace-nowrap">Icon</th>
-                <th className="px-4 py-3 text-green-700 font-bold whitespace-nowrap">Display URL</th>
-                <th className="px-4 py-3 text-green-700 font-bold whitespace-nowrap">Actions</th>
+                <th className="px-4 py-3 text-gray-700 font-bold whitespace-nowrap">Name</th>
+                <th className="px-4 py-3 text-gray-700 font-bold whitespace-nowrap">URL</th>
+                <th className="px-4 py-3 text-gray-700 font-bold whitespace-nowrap">Category</th>
+                <th className="px-4 py-3 text-gray-700 font-bold whitespace-nowrap">IP</th>
+                <th className="px-4 py-3 text-gray-700 font-bold whitespace-nowrap">Icon</th>
+                <th className="px-4 py-3 text-gray-700 font-bold whitespace-nowrap">Display URL</th>
+                <th className="px-4 py-3 text-gray-700 font-bold whitespace-nowrap">Actions</th>
               </tr>
             </thead>
             <tbody>
               {filteredServices
                 .map((service, originalIdx) => ({ service, originalIdx }))
                 .map(({ service, originalIdx }) => (
-                  <tr key={originalIdx} className="border-b last:border-none hover:bg-green-50">
+                  <tr key={originalIdx} className="border-b border-gray-200 last:border-none hover:bg-gray-50 transition-colors">
                   <td className="px-4 py-3 font-semibold whitespace-nowrap">
-                    <input className="w-full bg-green-50 rounded px-2 py-1 border border-green-200" type="text" value={service.name || ''} onChange={e => handleUpdate(originalIdx, { ...service, name: e.target.value })} disabled={saving} />
+                    <input className="w-full bg-white rounded-lg px-3 py-2 border border-gray-300 focus:border-green-400 focus:ring-1 focus:ring-green-400 transition-all" type="text" value={service.name || ''} onChange={e => handleUpdate(originalIdx, { ...service, name: e.target.value })} disabled={saving} />
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap">
-                    <input className="w-full bg-green-50 rounded px-2 py-1 border border-green-200" type="text" value={service.url || ''} onChange={e => handleUpdate(originalIdx, { ...service, url: e.target.value })} disabled={saving} />
+                    <input className="w-full bg-white rounded-lg px-3 py-2 border border-gray-300 focus:border-green-400 focus:ring-1 focus:ring-green-400 transition-all" type="text" value={service.url || ''} onChange={e => handleUpdate(originalIdx, { ...service, url: e.target.value })} disabled={saving} />
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap">
                     <select
-                      className="w-full bg-green-50 rounded px-2 py-1 border border-green-200"
+                      className="w-full bg-white rounded-lg px-3 py-2 border border-gray-300 focus:border-green-400 focus:ring-1 focus:ring-green-400 transition-all"
                       value={service.category || ''}
                       onChange={e => handleUpdate(originalIdx, { ...service, category: e.target.value })}
                       disabled={saving}
@@ -593,25 +686,25 @@ const EditServices = () => {
                     </select>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap">
-                    <input className="w-full bg-green-50 rounded px-2 py-1 border border-green-200" type="text" value={service.ip || ''} onChange={e => handleUpdate(originalIdx, { ...service, ip: e.target.value })} disabled={saving} />
+                    <input className="w-full bg-white rounded-lg px-3 py-2 border border-gray-300 focus:border-green-400 focus:ring-1 focus:ring-green-400 transition-all" type="text" value={service.ip || ''} onChange={e => handleUpdate(originalIdx, { ...service, ip: e.target.value })} disabled={saving} />
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap">
                     <div className="flex items-center gap-3">
                       {service.icon ? (
                         <img src={service.icon} alt="icon" className="w-10 h-10 rounded-full border" />
                       ) : (
-                        <span className="w-10 h-10 rounded-full bg-green-200 text-green-700 flex items-center justify-center">IMG</span>
+                        <span className="w-10 h-10 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center font-semibold text-xs">IMG</span>
                       )}
-                      <input className="flex-1 bg-green-50 rounded px-2 py-1 border border-green-200" type="text" value={service.icon || ''} onChange={e => handleUpdate(originalIdx, { ...service, icon: e.target.value })} disabled={saving} placeholder="Icon URL" />
+                      <input className="flex-1 bg-white rounded-lg px-3 py-2 border border-gray-300 focus:border-green-400 focus:ring-1 focus:ring-green-400 transition-all" type="text" value={service.icon || ''} onChange={e => handleUpdate(originalIdx, { ...service, icon: e.target.value })} disabled={saving} placeholder="Icon URL" />
                     </div>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap">
-                    <input className="w-full bg-green-50 rounded px-2 py-1 border border-green-200" type="text" value={service.displayUrl || ''} onChange={e => handleUpdate(originalIdx, { ...service, displayUrl: e.target.value })} disabled={saving} />
+                    <input className="w-full bg-white rounded-lg px-3 py-2 border border-gray-300 focus:border-green-400 focus:ring-1 focus:ring-green-400 transition-all" type="text" value={service.displayUrl || ''} onChange={e => handleUpdate(originalIdx, { ...service, displayUrl: e.target.value })} disabled={saving} />
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap">
                     <div className="flex gap-2">
-                      <button className="bg-yellow-100 hover:bg-yellow-200 text-yellow-700 rounded p-2" title="Edit" onClick={() => handleEdit(originalIdx)}><PencilIcon className="w-4 h-4" /></button>
-                      <button className="bg-red-100 hover:bg-red-200 text-red-700 rounded p-2" onClick={() => handleDelete(originalIdx)} disabled={saving} title="Delete"><Trash2Icon className="w-4 h-4" /></button>
+                      <button className="bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg p-2 transition-colors" title="Edit" onClick={() => handleEdit(originalIdx)}><PencilIcon className="w-4 h-4" /></button>
+                      <button className="bg-red-500 hover:bg-red-600 text-white rounded-lg p-2 transition-colors" onClick={() => handleDelete(originalIdx)} disabled={saving} title="Delete"><Trash2Icon className="w-4 h-4" /></button>
                     </div>
                   </td>
                 </tr>

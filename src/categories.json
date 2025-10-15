@@ -12,8 +12,8 @@
     "name": "Network Config"
   },
   {
-    "id": "slack-server",
-    "name": "Slack Server"
+    "id": "slack-servers",
+    "name": "Slack Servers"
   },
   {
     "id": "email-server",
