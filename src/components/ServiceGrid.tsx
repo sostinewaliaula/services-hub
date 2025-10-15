@@ -1,4 +1,4 @@
-import { useEffect, useState, forwardRef, useImperativeHandle, useMemo, useCallback } from 'react';
+import { useEffect, useState, forwardRef, useImperativeHandle, useMemo, useCallback, useRef } from 'react';
 import { ServiceCard } from './ServiceCard';
 import { GridIcon } from 'lucide-react';
 
@@ -26,6 +26,8 @@ interface Service {
   ip?: string;
   icon?: string;
   status?: 'online' | 'offline' | 'unknown';
+  statusCode?: number;
+  statusText?: string;
   displayUrl?: string;
 }
 
@@ -111,6 +113,7 @@ export const ServiceGrid = forwardRef(function ServiceGrid({ searchQuery, highli
   const [isLoading, setIsLoading] = useState(true);
   const [isCheckingStatus, setIsCheckingStatus] = useState(false);
   const [error, setError] = useState('');
+  const isCheckingStatusRef = useRef(false);
   
   // Debounce search query to prevent excessive filtering
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
@@ -119,56 +122,94 @@ export const ServiceGrid = forwardRef(function ServiceGrid({ searchQuery, highli
   // Helper to determine if a service should be checked
   const isCheckable = (service: Service) => {
     const name = service.name.toLowerCase();
-    return service.category.toLowerCase() !== 'development' && !name.includes('database');
+    const url = service.url.toLowerCase();
+    
+    // Skip development and database services
+    if (service.category.toLowerCase() === 'development' || name.includes('database')) {
+      return false;
+    }
+    
+    // Skip internal services that are not accessible from the server
+    if (url.includes('.internal.') || url.includes('localhost') || url.includes('127.0.0.1')) {
+      return false;
+    }
+    
+    return true;
   };
 
   // Load services from API
   const loadServices = useCallback(async () => {
     try {
-      console.log('Loading services from API...');
       const response = await fetch('/api/services');
       if (!response.ok) throw new Error('Failed to load services');
       const data = await response.json();
-      console.log('Services loaded:', data.length, 'services');
       setServices(data);
     } catch (err) {
-      console.error('Error loading services:', err);
       setError('Failed to load services');
     }
   }, []);
 
   // Status check logic as a function for reuse
   const checkStatuses = useCallback(async () => {
-    if (services.length === 0) return;
+    if (isCheckingStatusRef.current) return; // Prevent multiple simultaneous checks
     
-    setIsCheckingStatus(true);
-    const statusPromises = services.map(async (service) => {
-      if (!isCheckable(service)) {
-        return { ...service, status: 'unknown' as const };
-      }
-      try {
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 3000);
-        await fetch(service.url, { method: 'HEAD', mode: 'no-cors', signal: controller.signal });
-        clearTimeout(timeout);
-        return { ...service, status: 'online' as const };
-      } catch {
-        return { ...service, status: 'offline' as const };
-      }
+    setServices(currentServices => {
+      if (currentServices.length === 0) return currentServices;
+      
+      isCheckingStatusRef.current = true;
+      setIsCheckingStatus(true);
+      
+      // Run status checks asynchronously using server-side proxy
+      const statusPromises = currentServices.map(async (service) => {
+        if (!isCheckable(service)) {
+          return { ...service, status: 'unknown' as const };
+        }
+        
+        try {
+          // Use server-side status check to avoid CORS issues
+          const response = await fetch('/api/check-status', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ url: service.url })
+          });
+          
+          if (!response.ok) {
+            throw new Error(`Status check failed: ${response.status}`);
+          }
+          
+          const result = await response.json();
+          
+          return { 
+            ...service, 
+            status: result.status as 'online' | 'offline',
+            statusCode: result.statusCode,
+            statusText: result.statusText
+          };
+        } catch (error) {
+          console.warn(`Status check failed for ${service.name} (${service.url}):`, error);
+          return { ...service, status: 'offline' as const };
+        }
+      });
+      
+      // Update services when status checks complete
+      Promise.all(statusPromises).then(checked => {
+        setServices(checked);
+        setIsCheckingStatus(false);
+        isCheckingStatusRef.current = false;
+      });
+      
+      return currentServices; // Return current state while processing
     });
-    const checked = await Promise.all(statusPromises);
-    setServices(checked);
-    setIsCheckingStatus(false);
-  }, [services]);
+  }, []);
 
   useImperativeHandle(ref, () => ({ refresh: checkStatuses }), [checkStatuses]);
 
   // Initial load
   useEffect(() => {
     const initializeData = async () => {
-      console.log('Initializing data...');
       await loadServices();
-      console.log('Setting loading to false');
       setIsLoading(false);
     };
     initializeData();
@@ -176,11 +217,11 @@ export const ServiceGrid = forwardRef(function ServiceGrid({ searchQuery, highli
 
   // Check statuses after services are loaded (without affecting main loading state)
   useEffect(() => {
-    if (services.length > 0) {
+    if (services.length > 0 && !isCheckingStatusRef.current) {
       // Run status check in background without showing loading
       checkStatuses();
     }
-  }, [services.length, checkStatuses]);
+  }, [services.length]); // Only depend on services.length to prevent infinite loop
 
   // Memoized filtered services based on debounced search query
   const filteredServices = useMemo(() => {

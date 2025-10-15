@@ -119,6 +119,65 @@ app.delete('/api/categories/:id', async (req, res) => {
   }
 });
 
+// Status check endpoint to avoid CORS issues
+app.post('/api/check-status', async (req, res) => {
+  try {
+    const { url } = req.body;
+    if (!url) {
+      return res.status(400).send('URL is required');
+    }
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000);
+
+    try {
+      // Try multiple methods
+      let response;
+      
+      // Method 1: Try HEAD request
+      try {
+        response = await fetch(url, { 
+          method: 'HEAD', 
+          signal: controller.signal,
+          timeout: 5000,
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+          }
+        });
+      } catch (headError) {
+        // Method 2: Try GET request
+        response = await fetch(url, { 
+          method: 'GET', 
+          signal: controller.signal,
+          timeout: 5000,
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+          }
+        });
+      }
+
+      clearTimeout(timeout);
+      
+      const isOnline = response.ok;
+      res.json({ 
+        url, 
+        status: isOnline ? 'online' : 'offline',
+        statusCode: response.status,
+        statusText: response.statusText
+      });
+    } catch (fetchError) {
+      clearTimeout(timeout);
+      res.json({ 
+        url, 
+        status: 'offline',
+        error: fetchError.message
+      });
+    }
+  } catch (err) {
+    res.status(500).json({ error: 'Status check failed' });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`API server running on http://localhost:${PORT}`);
 });
