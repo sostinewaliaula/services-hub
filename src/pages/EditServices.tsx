@@ -12,7 +12,7 @@ type Category = {
   id: string;
   name: string;
 };
-import { PencilIcon, Trash2Icon, PlusIcon, SaveIcon, XIcon } from 'lucide-react';
+import { PencilIcon, Trash2Icon, PlusIcon, SaveIcon, XIcon, SearchIcon } from 'lucide-react';
 
 const EditServices = () => {
   const [services, setServices] = useState<Service[]>([]);
@@ -244,6 +244,19 @@ const EditServices = () => {
     return services.filter(service => service.category === categoryId).length;
   };
 
+  // Filter services based on search
+  const filteredServices = services.filter(service => {
+    if (!search) return true;
+    const searchLower = search.toLowerCase();
+    return (
+      service.name.toLowerCase().includes(searchLower) ||
+      service.url.toLowerCase().includes(searchLower) ||
+      service.category.toLowerCase().includes(searchLower) ||
+      service.ip.toLowerCase().includes(searchLower) ||
+      (service.displayUrl && service.displayUrl.toLowerCase().includes(searchLower))
+    );
+  });
+
   const handleFixUndefinedCategories = async () => {
     try {
       const res = await fetch('/api/fix-undefined-categories', {
@@ -281,8 +294,8 @@ const EditServices = () => {
   if (loading) return <div className="flex items-center justify-center h-96 text-lg text-gray-500">Loading...</div>;
 
   return (
-    <div className="min-h-screen bg-green-50 p-0 flex flex-col items-center justify-center">
-      <div className="w-full flex flex-col items-center justify-center">
+    <div className="min-h-screen bg-green-50">
+      <div className="w-full bg-green-50">
         {/* Toast Notification */}
         {toast && (
           <div className={`fixed top-8 left-1/2 transform -translate-x-1/2 z-[9999] px-6 py-3 rounded-xl shadow-lg font-semibold text-lg transition-all
@@ -294,7 +307,7 @@ const EditServices = () => {
           </div>
         )}
         {/* Fixed Header with Search Bar */}
-        <div className="fixed top-0 left-0 w-full z-40 bg-green-100 shadow flex flex-col md:flex-row md:items-center md:justify-between gap-4 px-8 py-6" style={{ maxWidth: '100vw' }}>
+        <div className="fixed top-0 left-0 w-full z-40 bg-green-100 shadow flex flex-col md:flex-row md:items-center md:justify-between gap-4 px-8 py-4" style={{ maxWidth: '100vw' }}>
           <div>
             <h1 className="text-4xl font-bold text-green-700 mb-2">Service Management</h1>
             <p className="text-green-900 text-lg">View, add, edit, and manage all services.</p>
@@ -314,8 +327,8 @@ const EditServices = () => {
           </div>
         </div>
 
-        {/* Spacer for fixed header */}
-        <div style={{ height: '120px' }}></div>
+        {/* Content area with proper spacing */}
+        <div className="pt-44 px-4 w-full max-w-7xl mx-auto min-h-screen">
 
         {/* Modal for Add Service */}
         {showModal && (
@@ -498,10 +511,43 @@ const EditServices = () => {
           </div>
         )}
 
-  {/* Search/Filter Bar removed, now in header */}
-        {/* Table */}
-  <div className="bg-white rounded-2xl shadow overflow-x-auto w-full" style={{ maxWidth: '100vw' }}>
-          <table className="min-w-full text-left table-fixed">
+        {/* Search Results Info */}
+        {search && (
+          <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+            <p className="text-blue-700 font-medium">
+              Showing {filteredServices.length} result(s) for "{search}"
+              <button 
+                onClick={() => setSearch('')} 
+                className="ml-2 text-blue-500 hover:text-blue-700 underline"
+              >
+                Clear search
+              </button>
+            </p>
+          </div>
+        )}
+
+        {/* Table or No Results */}
+        {filteredServices.length === 0 ? (
+          <div className="bg-white rounded-2xl shadow p-12 text-center">
+            <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+              <SearchIcon className="w-8 h-8 text-gray-400" />
+            </div>
+            <h3 className="text-xl font-semibold text-gray-600 mb-2">No services found</h3>
+            <p className="text-gray-500 mb-4">
+              {search ? `No services match your search for "${search}"` : 'No services available'}
+            </p>
+            {search && (
+              <button 
+                onClick={() => setSearch('')} 
+                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+              >
+                Clear search
+              </button>
+            )}
+          </div>
+        ) : (
+          <div className="bg-white rounded-2xl shadow overflow-x-auto w-full mt-4">
+            <table className="min-w-full text-left table-fixed">
             <colgroup>
               <col style={{ width: '220px' }} />
               <col style={{ width: '400px' }} />
@@ -511,7 +557,7 @@ const EditServices = () => {
               <col style={{ width: '260px' }} />
               <col style={{ width: '180px' }} />
             </colgroup>
-            <thead className="bg-green-100">
+            <thead className="bg-green-100 sticky top-0 z-10 shadow-sm border-b-2 border-green-200">
               <tr>
                 <th className="px-4 py-3 text-green-700 font-bold whitespace-nowrap">Name</th>
                 <th className="px-4 py-3 text-green-700 font-bold whitespace-nowrap">URL</th>
@@ -523,17 +569,8 @@ const EditServices = () => {
               </tr>
             </thead>
             <tbody>
-              {services
+              {filteredServices
                 .map((service, originalIdx) => ({ service, originalIdx }))
-                .filter(({ service }) => {
-                  const q = search.toLowerCase();
-                  return (
-                    service.name?.toLowerCase().includes(q) ||
-                    service.url?.toLowerCase().includes(q) ||
-                    service.category?.toLowerCase().includes(q) ||
-                    service.ip?.toLowerCase().includes(q)
-                  );
-                })
                 .map(({ service, originalIdx }) => (
                   <tr key={originalIdx} className="border-b last:border-none hover:bg-green-50">
                   <td className="px-4 py-3 font-semibold whitespace-nowrap">
@@ -583,7 +620,8 @@ const EditServices = () => {
           </table>
           {saving && <div className="p-4 text-green-600 flex items-center gap-2"><SaveIcon className="w-4 h-4 animate-spin" /> Saving...</div>}
         </div>
-      </div>
+        )}
+        </div>
 
       {/* Delete Confirmation Modal */}
       {deleteConfirm.show && deleteConfirm.category && (
@@ -630,6 +668,7 @@ const EditServices = () => {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 };
