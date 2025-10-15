@@ -115,8 +115,7 @@ export function Dashboard() {
           </div>
         </div>
 
-        <ServiceGrid ref={serviceGridRef} searchQuery={searchQuery} />
-  <ServiceGrid ref={serviceGridRef} searchQuery={searchQuery} highlightService={highlightService} />
+        <ServiceGrid ref={serviceGridRef} searchQuery={searchQuery} highlightService={highlightService} />
       </main>
 
       {/* Footer with green theme */}

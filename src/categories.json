@@ -1,0 +1,126 @@
+[
+  {
+    "id": "dns-server",
+    "name": "DNS Server"
+  },
+  {
+    "id": "system-monitor",
+    "name": "System Monitor"
+  },
+  {
+    "id": "user-management",
+    "name": "User Management"
+  },
+  {
+    "id": "network-config",
+    "name": "Network Config"
+  },
+  {
+    "id": "confluence-server",
+    "name": "Confluence Server"
+  },
+  {
+    "id": "slack-server",
+    "name": "Slack Server"
+  },
+  {
+    "id": "email-server",
+    "name": "Email Server"
+  },
+  {
+    "id": "calendar-server",
+    "name": "Calendar Server"
+  },
+  {
+    "id": "gitlab-server",
+    "name": "GitLab Server"
+  },
+  {
+    "id": "artifactory-server",
+    "name": "Artifactory Server"
+  },
+  {
+    "id": "jira-server",
+    "name": "Jira Server"
+  },
+  {
+    "id": "help-desk-server",
+    "name": "Help Desk Server"
+  },
+  {
+    "id": "knowledge-base-server",
+    "name": "Knowledge Base Server"
+  },
+  {
+    "id": "ticket-system-server",
+    "name": "Ticket System Server"
+  },
+  {
+    "id": "remote-desktop-server",
+    "name": "Remote Desktop Server"
+  },
+  {
+    "id": "jenkins-server",
+    "name": "Jenkins Server"
+  },
+  {
+    "id": "gerrit-server",
+    "name": "Gerrit Server"
+  },
+  {
+    "id": "jenkins-server-2",
+    "name": "Jenkins Server 2"
+  },
+  {
+    "id": "vpn-server",
+    "name": "VPN Server"
+  },
+  {
+    "id": "v6-api-server",
+    "name": "v6 API Server"
+  },
+  {
+    "id": "jira-test-server",
+    "name": "Jira Test Server"
+  },
+  {
+    "id": "turnkey-api-server",
+    "name": "Turnkey API Server"
+  },
+  {
+    "id": "weblogic-server-vm130",
+    "name": "WebLogic Server (VM 130)"
+  },
+  {
+    "id": "weblogic-server-vm35",
+    "name": "WebLogic Server (VM 35)"
+  },
+  {
+    "id": "weblogic-server-vm70",
+    "name": "WebLogic Server (VM 70)"
+  },
+  {
+    "id": "weblogic-server-vm97",
+    "name": "WebLogic Server (VM 97)"
+  },
+  {
+    "id": "weblogic-server-vm98",
+    "name": "WebLogic Server (VM 98)"
+  },
+  {
+    "id": "weblogic-server-vm103",
+    "name": "WebLogic Server (VM 103)"
+  },
+  {
+    "id": "weblogic-server-vm140",
+    "name": "WebLogic Server (VM 140)"
+  },
+  {
+    "id": "zimbra-email-server",
+    "name": "Zimbra Email Server"
+  },
+  {
+    "id": "oracle-database",
+    "name": "Oracle 12C Database"
+  }
+]

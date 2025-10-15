@@ -1,7 +1,6 @@
 import { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
 import { ServiceCard } from './ServiceCard';
 import { GridIcon } from 'lucide-react';
-import servicesData from '../services.json';
 
 interface Service {
   name: string;
@@ -45,74 +44,44 @@ const getCategoryBgColor = (category: string): string => {
   }
 };
 
-// Helper function to get server display name
-const getServerDisplayName = (category: string): string => {
-  switch (category) {
-    case 'IP-001':
-      return 'DNS Server';
-    case 'IP-004':
-      return 'System Monitor';
-    case 'IP-005':
-      return 'User Management';
-    case 'IP-006':
-      return 'Network Config';
-    case 'IP-007':
-      return 'Confluence Server';
-    case 'IP-008':
-      return 'Slack Server';
-    case 'IP-009':
-      return 'Email Server';
-    case 'IP-010':
-      return 'Calendar Server';
-    case 'IP-012':
-      return 'GitLab Server';
-    case 'IP-013':
-      return 'Artifactory Server';
-    case 'IP-014':
-      return 'Jira Server';
-    case 'IP-015':
-      return 'Help Desk Server';
-    case 'IP-016':
-      return 'Knowledge Base Server';
-    case 'IP-017':
-      return 'Ticket System Server';
-    case 'IP-019':
-      return 'Remote Desktop Server';
-    case 'IP-026':
-      return 'Jenkins Server';
-    case 'IP-027':
-      return 'Gerrit Server';
-    case 'IP-055':
-      return 'Jenkins Server 2';
-    case 'IP-069':
-      return 'VPN Server';
-    case 'IP-073':
-      return 'v6 API Server';
-    case 'IP-093':
-      return 'Jira Test Server';
-    case 'IP-105':
-      return 'Turnkey API Server';
-    case 'IP-130':
-      return 'WebLogic Server (VM 130)';
-    case 'IP-035':
-      return 'WebLogic Server (VM 35)';
-    case 'IP-070':
-      return 'WebLogic Server (VM 70)';
-    case 'IP-097':
-      return 'WebLogic Server (VM 97)';
-    case 'IP-098':
-      return 'WebLogic Server (VM 98)';
-    case 'IP-103':
-      return 'WebLogic Server (VM 103)';
-    case 'IP-140':
-      return 'WebLogic Server (VM 140)';
-    case 'IP-143':
-      return 'Zimbra Email Server';
-    case 'IP-150':
-      return 'Weblogic Server';
-    default:
-      return category;
-  }
+// Helper function to get server display name from category ID
+const getServerDisplayName = (categoryId: string): string => {
+  // Map category IDs to display names
+  const categoryMap: Record<string, string> = {
+    'dns-server': 'DNS Server',
+    'system-monitor': 'System Monitor',
+    'user-management': 'User Management',
+    'network-config': 'Network Config',
+    'confluence-server': 'Confluence Server',
+    'slack-server': 'Slack Server',
+    'email-server': 'Email Server',
+    'calendar-server': 'Calendar Server',
+    'gitlab-server': 'GitLab Server',
+    'artifactory-server': 'Artifactory Server',
+    'jira-server': 'Jira Server',
+    'help-desk-server': 'Help Desk Server',
+    'knowledge-base-server': 'Knowledge Base Server',
+    'ticket-system-server': 'Ticket System Server',
+    'remote-desktop-server': 'Remote Desktop Server',
+    'jenkins-server': 'Jenkins Server',
+    'gerrit-server': 'Gerrit Server',
+    'jenkins-server-2': 'Jenkins Server 2',
+    'vpn-server': 'VPN Server',
+    'v6-api-server': 'v6 API Server',
+    'jira-test-server': 'Jira Test Server',
+    'turnkey-api-server': 'Turnkey API Server',
+    'weblogic-server-vm130': 'WebLogic Server (VM 130)',
+    'weblogic-server-vm35': 'WebLogic Server (VM 35)',
+    'weblogic-server-vm70': 'WebLogic Server (VM 70)',
+    'weblogic-server-vm97': 'WebLogic Server (VM 97)',
+    'weblogic-server-vm98': 'WebLogic Server (VM 98)',
+    'weblogic-server-vm103': 'WebLogic Server (VM 103)',
+    'weblogic-server-vm140': 'WebLogic Server (VM 140)',
+    'zimbra-email-server': 'Zimbra Email Server',
+    'oracle-database': 'Oracle 12C Database'
+  };
+  
+  return categoryMap[categoryId] || categoryId;
 };
 
 interface ServiceGridProps {
@@ -132,10 +101,25 @@ export const ServiceGrid = forwardRef(function ServiceGrid({ searchQuery, highli
     return service.category.toLowerCase() !== 'development' && !name.includes('database');
   };
 
+  // Load services from API
+  const loadServices = async () => {
+    try {
+      const response = await fetch('/api/services');
+      if (!response.ok) throw new Error('Failed to load services');
+      const data = await response.json();
+      setServices(data);
+      setFilteredServices(data);
+    } catch (err) {
+      setError('Failed to load services');
+    }
+  };
+
   // Status check logic as a function for reuse
   const checkStatuses = async () => {
+    if (services.length === 0) return;
+    
     setIsLoading(true);
-    const statusPromises = servicesData.map(async (service) => {
+    const statusPromises = services.map(async (service) => {
       if (!isCheckable(service)) {
         return { ...service, status: 'unknown' as const };
       }
@@ -155,12 +139,23 @@ export const ServiceGrid = forwardRef(function ServiceGrid({ searchQuery, highli
     setIsLoading(false);
   };
 
-  useImperativeHandle(ref, () => ({ refresh: checkStatuses }), [checkStatuses]);
+  useImperativeHandle(ref, () => ({ refresh: checkStatuses }), [services]);
 
   // Initial load
   useEffect(() => {
-    checkStatuses();
+    const initializeData = async () => {
+      await loadServices();
+      setIsLoading(false);
+    };
+    initializeData();
   }, []);
+
+  // Check statuses after services are loaded
+  useEffect(() => {
+    if (services.length > 0) {
+      checkStatuses();
+    }
+  }, [services.length]);
 
   // Handle search
   useEffect(() => {
