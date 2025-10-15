@@ -46,6 +46,7 @@ const getServiceIcon = (name: string, category: string = '') => {
 
 // Helper function to get category color scheme by display name
 const categoryColorMap: Record<string, { bg: string; text: string; hover: string }> = {
+  'Uncategorized': { bg: 'bg-gradient-to-br from-gray-500 to-slate-600', text: 'text-gray-700 dark:text-gray-300', hover: 'hover:from-gray-600 hover:to-slate-700' },
   'WebLogic Server (VM 97)': { bg: 'bg-gradient-to-br from-indigo-500 to-blue-600', text: 'text-indigo-700 dark:text-indigo-300', hover: 'hover:from-indigo-600 hover:to-blue-700' },
   'WebLogic Server (VM 35)': { bg: 'bg-gradient-to-br from-blue-500 to-cyan-600', text: 'text-blue-700 dark:text-blue-300', hover: 'hover:from-blue-600 hover:to-cyan-700' },
   'WebLogic Server (VM 70)': { bg: 'bg-gradient-to-br from-purple-500 to-pink-600', text: 'text-purple-700 dark:text-purple-300', hover: 'hover:from-purple-600 hover:to-pink-700' },

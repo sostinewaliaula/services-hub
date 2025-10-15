@@ -17,7 +17,7 @@
   {
     "name": "User Management",
     "url": "http://users.internal.services",
-    "category": "user-management",
+    "category": "default",
     "ip": "10.176.18.5",
     "icon": ""
   },
@@ -31,7 +31,7 @@
   {
     "name": "Confluence",
     "url": "http://confluence.internal.services",
-    "category": "confluence-server",
+    "category": "default",
     "ip": "10.176.18.7",
     "icon": "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/confluence.svg"
   },
@@ -1057,7 +1057,7 @@
   {
     "name": "test222",
     "url": "http://dns.turnkey.local",
-    "category": "as",
+    "category": "default",
     "ip": "as",
     "icon": "",
     "displayUrl": ""

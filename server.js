@@ -97,25 +97,96 @@ app.delete('/api/categories/:id', async (req, res) => {
     const data = await fs.readFile(categoriesPath, 'utf8');
     const categories = JSON.parse(data);
     
-    // Check if category is in use by services
+    // Check if category exists
+    const categoryToDelete = categories.find(cat => cat.id === req.params.id);
+    if (!categoryToDelete) {
+      return res.status(404).send('Category not found');
+    }
+    
+    // Don't allow deletion of the default category
+    if (req.params.id === 'default') {
+      return res.status(400).send('Cannot delete the default category');
+    }
+    
+    // Get services using this category
     const servicesData = await fs.readFile(servicesPath, 'utf8');
     const services = JSON.parse(servicesData);
     const servicesUsingCategory = services.filter(service => service.category === req.params.id);
     
+    // Ensure default category exists
+    let defaultCategory = categories.find(cat => cat.id === 'default');
+    if (!defaultCategory) {
+      defaultCategory = { id: 'default', name: 'Uncategorized' };
+      categories.push(defaultCategory);
+    }
+    
+    // Move services to default category if any are using the category being deleted
     if (servicesUsingCategory.length > 0) {
-      return res.status(400).send(`Cannot delete category: ${servicesUsingCategory.length} service(s) are using this category`);
+      const updatedServices = services.map(service => 
+        service.category === req.params.id 
+          ? { ...service, category: 'default' }
+          : service
+      );
+      await fs.writeFile(servicesPath, JSON.stringify(updatedServices, null, 2));
     }
     
+    // Remove the category
     const filteredCategories = categories.filter(cat => cat.id !== req.params.id);
-    
-    if (filteredCategories.length === categories.length) {
-      return res.status(404).send('Category not found');
-    }
-    
     await fs.writeFile(categoriesPath, JSON.stringify(filteredCategories, null, 2));
-    res.sendStatus(200);
+    
+    res.json({ 
+      message: `Category deleted successfully. ${servicesUsingCategory.length} service(s) moved to default category.`,
+      movedServices: servicesUsingCategory.length
+    });
   } catch (err) {
     res.status(500).send('Error deleting category');
+  }
+});
+
+// Endpoint to fix services with undefined categories
+app.post('/api/fix-undefined-categories', async (req, res) => {
+  try {
+    const servicesData = await fs.readFile(servicesPath, 'utf8');
+    const services = JSON.parse(servicesData);
+    
+    const categoriesData = await fs.readFile(categoriesPath, 'utf8');
+    const categories = JSON.parse(categoriesData);
+    
+    // Ensure default category exists
+    let defaultCategory = categories.find(cat => cat.id === 'default');
+    if (!defaultCategory) {
+      defaultCategory = { id: 'default', name: 'Uncategorized' };
+      categories.push(defaultCategory);
+      await fs.writeFile(categoriesPath, JSON.stringify(categories, null, 2));
+    }
+    
+    // Find services with undefined or invalid categories
+    const validCategoryIds = categories.map(cat => cat.id);
+    const servicesToFix = services.filter(service => 
+      !service.category || !validCategoryIds.includes(service.category)
+    );
+    
+    if (servicesToFix.length > 0) {
+      const updatedServices = services.map(service => 
+        (!service.category || !validCategoryIds.includes(service.category))
+          ? { ...service, category: 'default' }
+          : service
+      );
+      await fs.writeFile(servicesPath, JSON.stringify(updatedServices, null, 2));
+      
+      res.json({ 
+        message: `Fixed ${servicesToFix.length} service(s) with undefined categories`,
+        fixedServices: servicesToFix.length,
+        services: servicesToFix.map(s => s.name)
+      });
+    } else {
+      res.json({ 
+        message: 'No services with undefined categories found',
+        fixedServices: 0
+      });
+    }
+  } catch (err) {
+    res.status(500).json({ error: 'Error fixing undefined categories' });
   }
 });
 

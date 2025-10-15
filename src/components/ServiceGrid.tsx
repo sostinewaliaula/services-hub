@@ -89,6 +89,7 @@ const getCategoryBgColor = (category: string): string => {
 const getServerDisplayName = (categoryId: string): string => {
   // Map category IDs to display names
   const categoryMap: Record<string, string> = {
+    'default': 'Uncategorized',
     'dns-server': 'DNS Server',
     'system-monitor': 'System Monitor',
     'user-management': 'User Management',

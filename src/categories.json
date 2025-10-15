@@ -8,16 +8,8 @@
     "name": "System Monitor"
   },
   {
-    "id": "user-management",
-    "name": "User Management"
-  },
-  {
     "id": "network-config",
     "name": "Network Config"
-  },
-  {
-    "id": "confluence-server",
-    "name": "Confluence Server"
   },
   {
     "id": "slack-server",
@@ -41,7 +33,7 @@
   },
   {
     "id": "jira-server",
-    "name": "Jira Server"
+    "name": "Jira Servers"
   },
   {
     "id": "help-desk-server",
@@ -122,5 +114,13 @@
   {
     "id": "oracle-database",
     "name": "Oracle 12C Database"
+  },
+  {
+    "id": "default",
+    "name": "Uncategorized"
+  },
+  {
+    "id": "main-page",
+    "name": "Main Pages"
   }
 ]

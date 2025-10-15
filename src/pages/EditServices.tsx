@@ -27,13 +27,14 @@ const EditServices = () => {
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null);
   const [search, setSearch] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [newCategory, setNewCategory] = useState<Category>({ id: '', name: '' });
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState<{ show: boolean; category: Category | null }>({ show: false, category: null });
 
   // Load services and categories from backend
   useEffect(() => {
@@ -193,25 +194,88 @@ const EditServices = () => {
     }
   };
 
-  const handleDeleteCategory = async (categoryId: string) => {
+  const handleDeleteCategory = (category: Category) => {
+    setDeleteConfirm({ show: true, category });
+  };
+
+  const confirmDeleteCategory = async () => {
+    if (!deleteConfirm.category) return;
+    
     try {
-      const res = await fetch(`/api/categories/${categoryId}`, {
+      const res = await fetch(`/api/categories/${deleteConfirm.category.id}`, {
         method: 'DELETE',
       });
+      
       if (!res.ok) {
         const errorMsg = await res.text();
         setToast({ message: errorMsg, type: 'error' });
         return;
       }
-      const updated = categories.filter(cat => cat.id !== categoryId);
+      
+      const result = await res.json();
+      const updated = categories.filter(cat => cat.id !== deleteConfirm.category!.id);
       saveCategories(updated, 'delete');
+      
+      // Show success message with details about moved services
+      if (result.movedServices > 0) {
+        setToast({ 
+          message: `Category deleted successfully. ${result.movedServices} service(s) moved to default category.`, 
+          type: 'success' 
+        });
+        // Refresh services to show updated categories
+        const servicesResponse = await fetch('/api/services');
+        const servicesData = await servicesResponse.json();
+        setServices(servicesData);
+      } else {
+        setToast({ message: 'Category deleted successfully', type: 'success' });
+      }
     } catch {
       setToast({ message: 'Failed to delete category', type: 'error' });
+    } finally {
+      setDeleteConfirm({ show: false, category: null });
     }
+  };
+
+  const cancelDeleteCategory = () => {
+    setDeleteConfirm({ show: false, category: null });
   };
 
   const getServiceCountForCategory = (categoryId: string): number => {
     return services.filter(service => service.category === categoryId).length;
+  };
+
+  const handleFixUndefinedCategories = async () => {
+    try {
+      const res = await fetch('/api/fix-undefined-categories', {
+        method: 'POST',
+      });
+      
+      if (!res.ok) {
+        const errorMsg = await res.text();
+        setToast({ message: errorMsg, type: 'error' });
+        return;
+      }
+      
+      const result = await res.json();
+      if (result.fixedServices > 0) {
+        setToast({ 
+          message: `Fixed ${result.fixedServices} service(s) with undefined categories`, 
+          type: 'success' 
+        });
+        // Refresh both services and categories
+        const servicesResponse = await fetch('/api/services');
+        const servicesData = await servicesResponse.json();
+        setServices(servicesData);
+        
+        const categoriesResponse = await fetch('/api/categories');
+        const categoriesData = await categoriesResponse.json();
+        setCategories(categoriesData);
+      } else {
+        setToast({ message: 'No services with undefined categories found', type: 'info' });
+      }
+    } catch {
+      setToast({ message: 'Failed to fix undefined categories', type: 'error' });
+    }
   };
 
   if (loading) return <div className="flex items-center justify-center h-96 text-lg text-gray-500">Loading...</div>;
@@ -221,8 +285,10 @@ const EditServices = () => {
       <div className="w-full flex flex-col items-center justify-center">
         {/* Toast Notification */}
         {toast && (
-          <div className={`fixed top-8 left-1/2 transform -translate-x-1/2 z-50 px-6 py-3 rounded-xl shadow-lg font-semibold text-lg transition-all
-            ${toast.type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`}
+          <div className={`fixed top-8 left-1/2 transform -translate-x-1/2 z-[9999] px-6 py-3 rounded-xl shadow-lg font-semibold text-lg transition-all
+            ${toast.type === 'success' ? 'bg-green-500 text-white' : 
+              toast.type === 'info' ? 'bg-blue-500 text-white' : 
+              'bg-red-500 text-white'}`}
           >
             {toast.message}
           </div>
@@ -236,6 +302,9 @@ const EditServices = () => {
           <div className="flex flex-col md:flex-row gap-4 items-center w-full md:w-auto">
             <input className="w-full md:w-96 px-4 py-2 rounded-lg border border-green-300 focus:outline-none focus:ring-2 focus:ring-green-400" type="text" placeholder="Search by name, url, category, or IP..." value={search} onChange={e => setSearch(e.target.value)} />
             <button className="bg-green-500 text-white px-4 py-2 rounded-lg font-semibold shadow hover:bg-green-600" onClick={() => setSearch('')}>Reset Filters</button>
+            <button className="bg-orange-500 text-white px-4 py-2 rounded-lg font-semibold shadow hover:bg-orange-600" onClick={handleFixUndefinedCategories} disabled={saving}>
+              Fix Undefined Categories
+            </button>
             <button className="bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold shadow hover:bg-blue-600" onClick={handleAddCategory} disabled={saving}>
               Manage Categories
             </button>
@@ -414,7 +483,7 @@ const EditServices = () => {
                         </button>
                         <button 
                           className="bg-red-100 hover:bg-red-200 text-red-700 rounded p-2" 
-                          onClick={() => handleDeleteCategory(category.id)} 
+                          onClick={() => handleDeleteCategory(category)} 
                           disabled={saving} 
                           title="Delete"
                         >
@@ -515,6 +584,52 @@ const EditServices = () => {
           {saving && <div className="p-4 text-green-600 flex items-center gap-2"><SaveIcon className="w-4 h-4 animate-spin" /> Saving...</div>}
         </div>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {deleteConfirm.show && deleteConfirm.category && (
+        <div className="fixed inset-0 z-[9998] flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md mx-4 animate-fade-in-up">
+            <div className="flex items-center mb-6">
+              <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mr-4">
+                <Trash2Icon className="w-6 h-6 text-red-600" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-gray-900">Delete Category</h3>
+                <p className="text-gray-600">This action cannot be undone</p>
+              </div>
+            </div>
+            
+            <div className="mb-6">
+              <p className="text-gray-700 mb-2">
+                Are you sure you want to delete the category <strong>"{deleteConfirm.category.name}"</strong>?
+              </p>
+              <p className="text-sm text-gray-500">
+                {getServiceCountForCategory(deleteConfirm.category.id) > 0 
+                  ? `${getServiceCountForCategory(deleteConfirm.category.id)} service(s) will be moved to the "Uncategorized" category.`
+                  : 'No services are using this category.'
+                }
+              </p>
+            </div>
+            
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={cancelDeleteCategory}
+                className="px-4 py-2 text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors"
+                disabled={saving}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDeleteCategory}
+                className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium transition-colors disabled:opacity-50"
+                disabled={saving}
+              >
+                {saving ? 'Deleting...' : 'Delete Category'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
