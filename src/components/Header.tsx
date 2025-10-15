@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BellIcon, MenuIcon, RefreshCw, SunIcon, MoonIcon, SearchIcon, FilterIcon, X } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { NotificationPanel } from './NotificationPanel';
 
 interface HeaderProps {
@@ -34,7 +34,7 @@ export function Header({ onRefresh, searchQuery, onSearchChange }: HeaderProps) 
   };
 
   // Function to scroll to service cards
-  const scrollToServices = () => {
+  const scrollToServices = useCallback(() => {
     const serviceGrid = document.querySelector('[data-service-grid]');
     if (serviceGrid) {
       serviceGrid.scrollIntoView({ 
@@ -43,15 +43,15 @@ export function Header({ onRefresh, searchQuery, onSearchChange }: HeaderProps) 
         inline: 'nearest'
       });
     }
-  };
+  }, []);
 
   // Auto-scroll to services when search query changes
   useEffect(() => {
     if (searchQuery.trim()) {
-      // Small delay to ensure the filtered results are rendered
-      setTimeout(scrollToServices, 100);
+      // Reduced delay for better responsiveness
+      setTimeout(scrollToServices, 50);
     }
-  }, [searchQuery]);
+  }, [searchQuery, scrollToServices]);
 
   // Check for offline services periodically
   useEffect(() => {

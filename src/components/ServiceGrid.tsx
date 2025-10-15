@@ -1,6 +1,23 @@
-import { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
+import { useEffect, useState, forwardRef, useImperativeHandle, useMemo, useCallback } from 'react';
 import { ServiceCard } from './ServiceCard';
 import { GridIcon } from 'lucide-react';
+
+// Custom hook for debounced search
+const useDebounce = (value: string, delay: number) => {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+};
 
 interface Service {
   name: string;
@@ -91,9 +108,13 @@ interface ServiceGridProps {
 
 export const ServiceGrid = forwardRef(function ServiceGrid({ searchQuery, highlightService }: ServiceGridProps, ref) {
   const [services, setServices] = useState<Service[]>([]);
-  const [filteredServices, setFilteredServices] = useState<Service[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isCheckingStatus, setIsCheckingStatus] = useState(false);
   const [error, setError] = useState('');
+  
+  // Debounce search query to prevent excessive filtering
+  const debouncedSearchQuery = useDebounce(searchQuery, 300);
+  const isSearching = searchQuery !== debouncedSearchQuery;
 
   // Helper to determine if a service should be checked
   const isCheckable = (service: Service) => {
@@ -102,23 +123,25 @@ export const ServiceGrid = forwardRef(function ServiceGrid({ searchQuery, highli
   };
 
   // Load services from API
-  const loadServices = async () => {
+  const loadServices = useCallback(async () => {
     try {
+      console.log('Loading services from API...');
       const response = await fetch('/api/services');
       if (!response.ok) throw new Error('Failed to load services');
       const data = await response.json();
+      console.log('Services loaded:', data.length, 'services');
       setServices(data);
-      setFilteredServices(data);
     } catch (err) {
+      console.error('Error loading services:', err);
       setError('Failed to load services');
     }
-  };
+  }, []);
 
   // Status check logic as a function for reuse
-  const checkStatuses = async () => {
+  const checkStatuses = useCallback(async () => {
     if (services.length === 0) return;
     
-    setIsLoading(true);
+    setIsCheckingStatus(true);
     const statusPromises = services.map(async (service) => {
       if (!isCheckable(service)) {
         return { ...service, status: 'unknown' as const };
@@ -135,51 +158,61 @@ export const ServiceGrid = forwardRef(function ServiceGrid({ searchQuery, highli
     });
     const checked = await Promise.all(statusPromises);
     setServices(checked);
-    setFilteredServices(checked);
-    setIsLoading(false);
-  };
+    setIsCheckingStatus(false);
+  }, [services]);
 
-  useImperativeHandle(ref, () => ({ refresh: checkStatuses }), [services]);
+  useImperativeHandle(ref, () => ({ refresh: checkStatuses }), [checkStatuses]);
 
   // Initial load
   useEffect(() => {
     const initializeData = async () => {
+      console.log('Initializing data...');
       await loadServices();
+      console.log('Setting loading to false');
       setIsLoading(false);
     };
     initializeData();
-  }, []);
+  }, [loadServices]);
 
-  // Check statuses after services are loaded
+  // Check statuses after services are loaded (without affecting main loading state)
   useEffect(() => {
     if (services.length > 0) {
+      // Run status check in background without showing loading
       checkStatuses();
     }
-  }, [services.length]);
+  }, [services.length, checkStatuses]);
 
-  // Handle search
-  useEffect(() => {
-    if (searchQuery.trim() === '') {
-      setFilteredServices(services);
-    } else {
-      const query = searchQuery.toLowerCase();
-      const filtered = services.filter(service => 
-        service.name.toLowerCase().includes(query) || 
-        service.url.toLowerCase().includes(query) || 
-        service.category.toLowerCase().includes(query)
-      );
-      setFilteredServices(filtered);
+  // Memoized filtered services based on debounced search query
+  const filteredServices = useMemo(() => {
+    if (!debouncedSearchQuery.trim()) {
+      return services;
     }
-  }, [searchQuery, services]);
+    
+    const query = debouncedSearchQuery.toLowerCase();
+    return services.filter(service => {
+      const name = service.name.toLowerCase();
+      const url = service.url.toLowerCase();
+      const category = service.category.toLowerCase();
+      const displayName = getServerDisplayName(service.category).toLowerCase();
+      
+      return name.includes(query) || 
+             url.includes(query) || 
+             category.includes(query) ||
+             displayName.includes(query);
+    });
+  }, [services, debouncedSearchQuery]);
 
-  // Group services by category
-  const servicesByCategory = filteredServices.reduce<Record<string, Service[]>>((acc, service) => {
-    if (!acc[service.category]) {
-      acc[service.category] = [];
-    }
-    acc[service.category].push(service);
-    return acc;
-  }, {});
+  // Memoized category grouping
+  const servicesByCategory = useMemo(() => {
+    return filteredServices.reduce<Record<string, Service[]>>((acc, service) => {
+      const categoryName = getServerDisplayName(service.category);
+      if (!acc[categoryName]) {
+        acc[categoryName] = [];
+      }
+      acc[categoryName].push(service);
+      return acc;
+    }, {});
+  }, [filteredServices]);
 
   if (isLoading) {
     return (
@@ -223,6 +256,25 @@ export const ServiceGrid = forwardRef(function ServiceGrid({ searchQuery, highli
 
   return (
     <div className="space-y-12" data-service-grid>
+      {/* Search indicator */}
+      {isSearching && (
+        <div className="flex items-center justify-center py-4">
+          <div className="flex items-center space-x-2 text-blue-600 dark:text-blue-400">
+            <div className="w-4 h-4 border-2 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+            <span className="text-sm font-medium">Searching...</span>
+          </div>
+        </div>
+      )}
+
+      {/* Status checking indicator */}
+      {isCheckingStatus && (
+        <div className="flex items-center justify-center py-2">
+          <div className="flex items-center space-x-2 text-green-600 dark:text-green-400">
+            <div className="w-3 h-3 border-2 border-green-200 border-t-green-600 rounded-full animate-spin"></div>
+            <span className="text-xs font-medium">Checking service status...</span>
+          </div>
+        </div>
+      )}
 
       {Object.entries(servicesByCategory).length === 0 ? (
         <div className="p-12 text-center bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 dark:border-gray-700/50">
