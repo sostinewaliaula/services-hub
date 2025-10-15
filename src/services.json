@@ -73,7 +73,7 @@
   {
     "name": "Jira",
     "url": "http://jira.internal.services",
-    "category": "jira-server",
+    "category": "featured",
     "ip": "10.176.18.14",
     "icon": "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/jira.svg"
   },

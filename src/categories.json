@@ -122,5 +122,9 @@
   {
     "id": "main-page",
     "name": "Main Pages"
+  },
+  {
+    "id": "featured",
+    "name": "Featured Services"
   }
 ]

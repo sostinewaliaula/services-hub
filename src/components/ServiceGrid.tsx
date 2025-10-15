@@ -55,7 +55,15 @@ interface Service {
 
 // Helper function to get category icon color
 const getCategoryColor = (category: string): string => {
-  switch (category.toLowerCase()) {
+  const categoryLower = category.toLowerCase();
+  
+  // Priority categories get special golden styling
+  if (categoryLower.includes('featured') || categoryLower.includes('priority') || 
+      categoryLower.includes('essential') || categoryLower.includes('core')) {
+    return 'bg-gradient-to-r from-yellow-500 to-orange-600 text-white shadow-lg';
+  }
+  
+  switch (categoryLower) {
     case 'admin':
       return 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white';
     case 'collaboration':
@@ -71,7 +79,15 @@ const getCategoryColor = (category: string): string => {
 
 // Helper function to get category background color
 const getCategoryBgColor = (category: string): string => {
-  switch (category.toLowerCase()) {
+  const categoryLower = category.toLowerCase();
+  
+  // Priority categories get special golden background
+  if (categoryLower.includes('featured') || categoryLower.includes('priority') || 
+      categoryLower.includes('essential') || categoryLower.includes('core')) {
+    return 'bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20';
+  }
+  
+  switch (categoryLower) {
     case 'admin':
       return 'bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20';
     case 'collaboration':
@@ -266,7 +282,7 @@ export const ServiceGrid = forwardRef(function ServiceGrid({ searchQuery, highli
     });
   }, [services, debouncedSearchQuery]);
 
-  // Memoized category grouping with sorting
+  // Memoized category grouping with priority sorting
   const servicesByCategory = useMemo(() => {
     const grouped = filteredServices.reduce<Record<string, Service[]>>((acc, service) => {
       const categoryName = getServerDisplayName(service.category);
@@ -277,14 +293,33 @@ export const ServiceGrid = forwardRef(function ServiceGrid({ searchQuery, highli
       return acc;
     }, {});
 
-    // Sort categories with WebLogic first
+    // Sort categories with priority categories first
     return Object.fromEntries(
       Object.entries(grouped).sort(([catA], [catB]) => {
+        // Priority categories that should appear at the top
+        const priorityCategories = ['featured', 'priority', 'essential', 'core'];
+        
+        const aIsPriority = priorityCategories.some(priority => 
+          catA.toLowerCase().includes(priority) || 
+          getServerDisplayName(catA).toLowerCase().includes(priority)
+        );
+        const bIsPriority = priorityCategories.some(priority => 
+          catB.toLowerCase().includes(priority) || 
+          getServerDisplayName(catB).toLowerCase().includes(priority)
+        );
+        
+        // Priority categories first
+        if (aIsPriority && !bIsPriority) return -1;
+        if (!aIsPriority && bIsPriority) return 1;
+        
+        // Then WebLogic categories
         const aIsWeblogic = getServerDisplayName(catA).toLowerCase().includes('weblogic');
         const bIsWeblogic = getServerDisplayName(catB).toLowerCase().includes('weblogic');
         if (aIsWeblogic && !bIsWeblogic) return -1;
         if (!aIsWeblogic && bIsWeblogic) return 1;
-        return 0;
+        
+        // Finally, alphabetical order
+        return catA.localeCompare(catB);
       })
     );
   }, [filteredServices]);
@@ -391,10 +426,26 @@ const CategorySection = memo(function CategorySection({
   totalCategories: number;
   highlightService?: string | null;
 }) {
+  // Check if this is a priority category
+  const priorityCategories = ['featured', 'priority', 'essential', 'core'];
+  const isPriority = priorityCategories.some(priority => 
+    category.toLowerCase().includes(priority) || 
+    getServerDisplayName(category).toLowerCase().includes(priority)
+  );
+
   return (
     <div className="relative">
+      {/* Priority category indicator */}
+      {isPriority && (
+        <div className="absolute -top-2 left-6 z-10">
+          <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+            ⭐ FEATURED
+          </div>
+        </div>
+      )}
+      
       {/* Category Section with enhanced styling */}
-      <div className={`p-8 rounded-3xl shadow-xl border border-white/20 dark:border-gray-700/50 backdrop-blur-sm ${getCategoryBgColor(category)}`}>
+      <div className={`p-8 rounded-3xl shadow-xl border border-white/20 dark:border-gray-700/50 backdrop-blur-sm ${getCategoryBgColor(category)} ${isPriority ? 'ring-2 ring-yellow-400/50 shadow-2xl' : ''}`}>
         {/* Category Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center space-x-6">
